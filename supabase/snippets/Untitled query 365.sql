@@ -1,1 +1,0 @@
-select id, lugar, magnitud, es_chile from sismos order by fecha desc;
