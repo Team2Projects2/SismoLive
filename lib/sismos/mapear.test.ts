@@ -45,4 +45,43 @@ describe("featureASismo", () => {
     );
     expect(sismo?.magnitud).toBe(5.4);
   });
+
+  it.each([
+    ["an empty id", { id: "" }],
+    ["a non-string id", { id: 42 as unknown as string }],
+  ])("discards features with %s", (_, overrides) => {
+    expect(featureASismo({ ...feature(), ...overrides })).toBeNull();
+  });
+
+  it.each([
+    ["NaN magnitude", { mag: Number.NaN }],
+    ["infinite time", { time: Number.POSITIVE_INFINITY }],
+  ])("discards features with %s", (_, overrides) => {
+    expect(featureASismo(feature(overrides))).toBeNull();
+  });
+
+  it.each([
+    ["latitude above 90", [-71.6, 91, 35]],
+    ["latitude below -90", [-71.6, -91, 35]],
+    ["longitude above 180", [181, -33, 35]],
+    ["longitude below -180", [-181, -33, 35]],
+    ["non-finite depth", [-71.6, -33, Number.NaN]],
+    ["missing depth", [-71.6, -33]],
+  ])("discards features with %s", (_, coordinates) => {
+    const f = feature();
+    f.geometry.coordinates = coordinates as FeatureUsgs["geometry"]["coordinates"];
+    expect(featureASismo(f)).toBeNull();
+  });
+
+  it.each([
+    ["http", "http://earthquake.usgs.gov/x"],
+    ["javascript", "javascript:alert(1)"],
+    ["invalid", "not a url"],
+  ])("drops %s urls", (_, url) => {
+    expect(featureASismo(feature({ url }))?.url).toBeNull();
+  });
+
+  it("keeps a null url as null", () => {
+    expect(featureASismo(feature({ url: null }))?.url).toBeNull();
+  });
 });
