@@ -2,116 +2,68 @@
 
 import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
+import { useAhora } from "@/hooks/useAhora";
 import { useSismos } from "@/hooks/useSismos";
-import { colorPorMagnitud } from "@/lib/magnitud";
-import SismosTable from "./SismosTable";
+import { useVolcanes } from "@/hooks/useVolcanes";
+import { esChile } from "@/lib/region";
+import type { Sismo } from "@/lib/types";
+import CapasPanel, { type Capas } from "./map/CapasPanel";
+import Leyenda from "./map/Leyenda";
+import type { Foco } from "./map/SismosMap";
+import SismosRecientes, { type Pestana } from "./sidebar/SismosRecientes";
+import UltimoSismo from "./sidebar/UltimoSismo";
 
-const SismosMap = dynamic(() => import("./SismosMap"), {
+const SismosMap = dynamic(() => import("./map/SismosMap"), {
   ssr: false,
-  loading: () => <div className="h-full w-full bg-slate-900" />,
+  loading: () => <div className="h-full w-full bg-panel" />,
 });
 
-const formatoFecha = new Intl.DateTimeFormat("es-CL", {
-  dateStyle: "medium",
-  timeStyle: "short",
-});
-
-const LEYENDA = [
-  { etiqueta: "< 4", magnitud: 3 },
-  { etiqueta: "4 – 5", magnitud: 4 },
-  { etiqueta: "5 – 6", magnitud: 5 },
-  { etiqueta: "≥ 6", magnitud: 6 },
-];
+const LIMITE_LISTA = 80;
 
 export default function Dashboard() {
   const { sismos, cargando, error } = useSismos();
-  const [seleccionado, setSeleccionado] = useState<string | null>(null);
+  const { volcanes, error: errorVolcanes } = useVolcanes();
+  const ahora = useAhora();
+  const [pestana, setPestana] = useState<Pestana>("chile");
+  const [capas, setCapas] = useState<Capas>({ sismos: true, placas: false, volcanes: true });
+  const [foco, setFoco] = useState<Foco | null>(null);
 
-  const resumen = useMemo(() => {
-    if (sismos.length === 0) return null;
-    const mayor = sismos.reduce((a, b) => (b.magnitud > a.magnitud ? b : a));
-    return { total: sismos.length, mayor, ultimo: sismos[0] };
-  }, [sismos]);
+  const chile = useMemo(() => sismos.filter((s) => esChile(s.lugar)), [sismos]);
+  const lista = pestana === "chile" ? chile : sismos;
+
+  const mensaje = cargando
+    ? "Cargando sismos…"
+    : error
+      ? "No se pudieron cargar los datos."
+      : lista.length === 0
+        ? "No hay sismos registrados."
+        : null;
+
+  function seleccionar(s: Sismo) {
+    setFoco((f) => ({ lng: s.lng, lat: s.lat, n: (f?.n ?? 0) + 1 }));
+  }
 
   return (
-    <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-10 md:px-9">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl">
-          RealTime Data
-        </h1>
-        <p className="mt-2 text-slate-400">
-          Sismos recientes en Chile, actualizados en tiempo real.
-        </p>
+    <main className="grid flex-1 gap-3.5 p-3.5 md:min-h-0 md:grid-cols-[1fr_360px]">
+      <div className="relative h-[60vh] overflow-hidden rounded-xl border border-line md:h-auto">
+        <SismosMap sismos={lista} volcanes={volcanes} capas={capas} foco={foco} />
+        <CapasPanel capas={capas} onChange={setCapas} volcanesNoDisponibles={errorVolcanes} />
+        <Leyenda />
       </div>
 
-      <div className="mb-6 grid gap-4 sm:grid-cols-3">
-        <Tarjeta titulo="Sismos registrados" valor={resumen?.total ?? "—"} />
-        <Tarjeta
-          titulo="Mayor magnitud"
-          valor={resumen ? resumen.mayor.magnitud.toFixed(1) : "—"}
-          color={resumen ? colorPorMagnitud(resumen.mayor.magnitud) : undefined}
+      <aside className="flex flex-col gap-3 md:min-h-0 md:overflow-hidden">
+        <UltimoSismo sismo={lista[0] ?? null} ahora={ahora} mensaje={mensaje} />
+        <SismosRecientes
+          pestana={pestana}
+          onPestana={setPestana}
+          conteo={{ chile: chile.length, todos: sismos.length }}
+          // Full list including the newest quake, so the count badge matches the rows shown.
+          sismos={lista.slice(0, LIMITE_LISTA)}
+          ahora={ahora}
+          mensaje={lista.length > 1 ? null : mensaje}
+          onSelect={seleccionar}
         />
-        <Tarjeta
-          titulo="Último sismo"
-          valor={resumen ? formatoFecha.format(new Date(resumen.ultimo.fecha)) : "—"}
-          pequeno
-        />
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-[1fr_380px]">
-        <SismosTable
-          sismos={sismos}
-          cargando={cargando}
-          error={error}
-          seleccionado={seleccionado}
-          onSelect={setSeleccionado}
-        />
-        <div className="relative h-[380px] overflow-hidden rounded-2xl border border-white/10 shadow-xl shadow-black/30 md:h-[520px]">
-          <SismosMap
-            sismos={sismos}
-            seleccionado={seleccionado}
-            onSelect={setSeleccionado}
-          />
-          <div className="absolute bottom-6 left-3 z-[1000] rounded-xl border border-white/10 bg-slate-950/80 px-3 py-2 text-xs text-slate-300 backdrop-blur">
-            <p className="mb-1.5 font-medium text-slate-400">Magnitud</p>
-            <ul className="space-y-1">
-              {LEYENDA.map((l) => (
-                <li key={l.etiqueta} className="flex items-center gap-2">
-                  <span
-                    className="h-2.5 w-2.5 rounded-full"
-                    style={{ backgroundColor: colorPorMagnitud(l.magnitud) }}
-                  />
-                  {l.etiqueta}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
+      </aside>
     </main>
-  );
-}
-
-function Tarjeta({
-  titulo,
-  valor,
-  color,
-  pequeno,
-}: {
-  titulo: string;
-  valor: string | number;
-  color?: string;
-  pequeno?: boolean;
-}) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-slate-900/60 px-5 py-4 shadow-lg shadow-black/20">
-      <p className="text-xs uppercase tracking-wider text-slate-400">{titulo}</p>
-      <p
-        className={`mt-1 font-bold text-white ${pequeno ? "text-lg leading-9" : "text-3xl"}`}
-        style={color ? { color } : undefined}
-      >
-        {valor}
-      </p>
-    </div>
   );
 }
