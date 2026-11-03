@@ -1,31 +1,23 @@
+import EstadoActualizacion from "./header/EstadoActualizacion";
+
 export default function Header() {
   return (
-    <header className="sticky top-0 z-[1100] border-b border-white/10 bg-slate-950/70 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5 md:px-9">
-        <a href="#" className="flex items-center gap-2.5">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500" />
-          </span>
-          <span className="font-logo text-2xl font-extrabold tracking-tight text-white">
-            SismoLive
-          </span>
-        </a>
-        <nav className="flex gap-1 text-sm text-slate-300">
-          <a
-            href="#nosotros"
-            className="rounded-full px-3.5 py-1.5 transition hover:bg-white/10 hover:text-white"
-          >
-            Nosotros
-          </a>
-          <a
-            href="#contacto"
-            className="rounded-full px-3.5 py-1.5 transition hover:bg-white/10 hover:text-white"
-          >
-            Contacto
-          </a>
-        </nav>
+    <header className="flex flex-col gap-3 border-b border-line bg-[#0d1526] px-5 py-3 sm:flex-row sm:items-center sm:gap-6">
+      <div className="flex items-center gap-2.5">
+        <svg viewBox="0 0 34 22" className="h-[22px] w-[34px]" aria-hidden="true">
+          <polyline
+            points="0,11 8,11 11,3 14,19 17,6 20,15 23,11 34,11"
+            fill="none"
+            stroke="#ef4444"
+            strokeWidth="2"
+          />
+        </svg>
+        <div>
+          <b className="block font-logo text-xl">SismoLive</b>
+          <small className="text-xs text-muted">Monitoreo sísmico · Chile y alrededores</small>
+        </div>
       </div>
+      <EstadoActualizacion />
     </header>
   );
 }

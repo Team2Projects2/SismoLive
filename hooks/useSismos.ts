@@ -2,16 +2,24 @@
 
 import { useEffect } from "react";
 import useSWR from "swr";
+import { REGION_CHILE } from "@/lib/region";
 import { supabase } from "@/lib/supabase";
 import type { Sismo } from "@/lib/types";
 
+const DIAS = 7;
+
 async function cargar(): Promise<Sismo[]> {
+  const desde = new Date(Date.now() - DIAS * 24 * 60 * 60 * 1000).toISOString();
   const { data, error } = await supabase
     .from("sismos")
     .select("id, magnitud, lugar, fecha, lat, lng, profundidad, url")
-    .eq("es_chile", true)
+    .gte("lat", REGION_CHILE.latMin)
+    .lte("lat", REGION_CHILE.latMax)
+    .gte("lng", REGION_CHILE.lngMin)
+    .lte("lng", REGION_CHILE.lngMax)
+    .gte("fecha", desde)
     .order("fecha", { ascending: false })
-    .limit(100);
+    .limit(500);
   if (error) throw error;
   return data;
 }

@@ -1,38 +1,50 @@
 # SismoLive
-Globo 3D interactivo en Next.js con sismos en tiempo real usando Supabase y GitHub Actions.
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+Live map of earthquakes in Chile and surroundings, with volcano activity levels and tectonic plate boundaries.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 (App Router), React 19, Tailwind CSS v4
+- Mapbox GL via `react-map-gl/mapbox`
+- Supabase (Postgres + Realtime) for earthquake storage
+- Vitest for unit tests
+
+## Environment variables
+
+Copy `.env.example` to `.env.local` and fill in:
+
+| Name | Used by | Purpose |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | app, ingest | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_KEY` | app | Supabase publishable (anon) key, read-only |
+| `NEXT_PUBLIC_MAPBOX_TOKEN` | app | Mapbox public access token |
+| `SUPABASE_SECRET_KEY` | ingest only | Supabase secret key, never expose it to the browser |
+
+## Local development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npx supabase start          # local Supabase (Docker)
+npm run db:reset            # apply migrations + seed
+npm run dev                 # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Other scripts: `npm test`, `npm run typecheck`, `npm run lint`, `npm run db:types`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How data flows
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Earthquakes**: `scripts/ingest.ts` downloads the USGS 2.5+ weekly feed, validates each feature and upserts it into `public.sismos`, then stamps `public.ingestas.ultima`. A GitHub Actions workflow (`.github/workflows/ingest.yml`) runs it every 10 minutes. The browser reads with the publishable key (RLS: read only) and listens to Realtime changes.
+- **Volcanoes**: `app/api/volcanes/route.ts` fetches the SERNAGEOMIN RNVV API server-side, validates it and caches it for 10 minutes.
+- **Tectonic plates**: static GeoJSON in `public/data/pb2002-plates.json`.
 
-## Learn More
+To run the ingest against local Supabase:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321 SUPABASE_SECRET_KEY=<local secret key> npm run ingest
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Data sources and attribution
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Earthquakes: [USGS Earthquake Hazards Program](https://earthquake.usgs.gov/)
+- Volcanoes: SERNAGEOMIN, Red Nacional de Vigilancia Volcánica (RNVV)
+- Plate boundaries: PB2002 (Bird, 2003), via [fraxen/tectonicplates](https://github.com/fraxen/tectonicplates), ODC-By
