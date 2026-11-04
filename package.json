@@ -16,9 +16,6 @@
   "engines": {
     "node": ">=24"
   },
-  "engines": {
-    "node": ">=24"
-  },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
     "mapbox-gl": "^3.33.0",
