@@ -8,9 +8,9 @@ const RUMBOS: Record<string, string> = {
 };
 
 const PREFIJOS: [RegExp, string][] = [
-  [/^offshore /, "frente a la costa de "],
-  [/^off the coast of /, "frente a la costa de "],
-  [/^near the coast of /, "cerca de la costa de "],
+  [/^offshore /i, "frente a la costa de "],
+  [/^off the coast of /i, "frente a la costa de "],
+  [/^near the coast of /i, "cerca de la costa de "],
 ];
 
 // USGS places look like "25 km NNE of Calama, Chile"; translate them to plain Spanish.
@@ -44,6 +44,20 @@ const FORMATO_FECHA_HORA = new Intl.DateTimeFormat("es-CL", {
 
 export function fechaHora(iso: string): string {
   return `${FORMATO_FECHA_HORA.format(new Date(iso))} (hora de Chile)`;
+}
+
+// Compact variant for cards and lists; keeps the same fixed Chile time zone.
+const FORMATO_CORTO = new Intl.DateTimeFormat("es-CL", {
+  day: "numeric",
+  month: "short",
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
+  timeZone: "America/Santiago",
+});
+
+export function fechaHoraCorta(iso: string): string {
+  return FORMATO_CORTO.format(new Date(iso));
 }
 
 export function profundidadTexto(profundidad: number | null): string {

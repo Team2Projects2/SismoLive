@@ -57,7 +57,7 @@ export default function VolcanIcon({ nivel, ancho }: Props) {
         </filter>
       </defs>
 
-      <ellipse cx="20" cy="34" rx="17" ry="2" fill="#000" opacity=".35" />
+      <ellipse cx="20" cy="34" rx="17" ry="2" fill="#201d19" opacity=".18" />
       <path d={CONO_D} fill={`url(#${id}m)`} />
       {/* Snow cap, dimmed by ash during eruptions */}
       <path
@@ -109,14 +109,14 @@ export default function VolcanIcon({ nivel, ancho }: Props) {
         </>
       )}
 
-      <circle cx="35" cy="30" r="4.2" fill={NIVEL_COLOR[nivel]} stroke="#0b1220" strokeWidth="1.2" />
+      <circle cx="35" cy="30" r="4.2" fill={NIVEL_COLOR[nivel]} stroke="#fbf9f4" strokeWidth="1.2" />
       <text
         x="35"
         y="31.8"
         textAnchor="middle"
         fontSize="5.5"
         fontWeight="700"
-        fill="#0b1220"
+        fill="#fffdf8"
         fontFamily="system-ui"
       >
         {nivel}

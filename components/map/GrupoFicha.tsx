@@ -8,17 +8,20 @@ export default function GrupoFicha({ grupo }: { grupo: GrupoVolcanes }) {
   const resto = nombres.length - MAX_NOMBRES;
 
   return (
-    <div>
-      <div className="mb-1 flex items-center gap-1.5 font-semibold">
-        <span className="h-2.5 w-2.5 rounded-full" style={{ background: NIVEL_COLOR[grupo.nivel] }} />
+    <div className="text-[12px] leading-relaxed text-ink-soft">
+      <div className="mb-1.5 flex items-center gap-1.5 font-semibold text-ink">
+        <span
+          className="h-2.5 w-2.5 rounded-full"
+          style={{ background: NIVEL_COLOR[grupo.nivel] }}
+        />
         {nombres.length} volcanes · EAV {grupo.nivel}: {NIVEL_ETIQUETA[grupo.nivel]}
       </div>
-      <ul>
+      <ul className="space-y-0.5">
         {nombres.slice(0, MAX_NOMBRES).map((n, i) => (
           <li key={`${n}-${i}`}>{n}</li>
         ))}
       </ul>
-      {resto > 0 && <div className="text-muted">y {resto} más</div>}
+      {resto > 0 && <div className="mt-1 text-muted">y {resto} más</div>}
     </div>
   );
 }

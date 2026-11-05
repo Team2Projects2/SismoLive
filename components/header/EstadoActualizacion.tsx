@@ -10,36 +10,58 @@ export default function EstadoActualizacion() {
   const ahora = useAhora(1000);
 
   if (error) {
-    return <Contenedor>No se pudo obtener el estado de actualización</Contenedor>;
+    return (
+      <Panel>
+        <p className="text-[12px] leading-relaxed text-muted">
+          No se pudo obtener el estado de actualización.
+        </p>
+      </Panel>
+    );
   }
   if (!ultima || ahora === null) {
-    return <Contenedor>Cargando estado…</Contenedor>;
+    return (
+      <Panel>
+        <p className="text-[12px] leading-relaxed text-muted">Cargando estado…</p>
+      </Panel>
+    );
   }
 
   const estado = estadoIngesta(ultima, ahora);
   const fresco = estado.tipo === "fresco";
   const retrasado = estado.tipo === "retrasado";
+  const color = retrasado ? "bg-warn" : fresco ? "bg-ok" : "bg-accent";
 
   return (
-    <Contenedor>
-      <div className={`flex items-center gap-1.5 text-[13px] ${retrasado ? "text-amber-400" : "text-foreground"}`}>
-        {fresco && <span className="h-[9px] w-[9px] rounded-full bg-ok shadow-[0_0_8px_var(--color-ok)]" />}
-        {retrasado && <b>Datos con retraso ·</b>}
-        <span>
-          Actualizado hace <b>{estado.haceMin} min</b>
+    <div className="rounded-lg border border-line bg-surface-2 px-3.5 py-2.5" aria-live="polite">
+      <div className="flex items-baseline justify-between gap-3">
+        <span className="label">Última actualización</span>
+        <span
+          className={`inline-flex items-center gap-1.5 text-[12px] font-medium tabular-nums ${
+            retrasado ? "text-warn" : "text-ink-soft"
+          }`}
+        >
+          <span className={`h-1.5 w-1.5 rounded-full ${color}`} />
+          hace {estado.haceMin} min
         </span>
       </div>
-      <div>
-        {fresco ? (
-          <>
-            Próxima actualización en <b className="tabular-nums">{cuentaRegresiva(estado.faltaSeg)}</b>
-          </>
-        ) : (
-          "Próxima actualización: en curso (puede demorar unos minutos)"
-        )}
+
+      <div className="mt-1 flex items-baseline justify-between gap-3">
+        <span className="text-[12px] text-muted">
+          {fresco ? "Próxima actualización" : "Estado"}
+        </span>
+        <span className="font-display text-[17px] leading-none tabular-nums">
+          {fresco ? (
+            cuentaRegresiva(estado.faltaSeg)
+          ) : retrasado ? (
+            "Con retraso"
+          ) : (
+            "En curso"
+          )}
+        </span>
       </div>
+
       <div
-        className="h-1 w-40 overflow-hidden rounded-sm bg-line"
+        className="mt-2 h-1 overflow-hidden rounded-full bg-line"
         role="progressbar"
         aria-label="Tiempo hasta la próxima actualización"
         aria-valuemin={0}
@@ -47,17 +69,23 @@ export default function EstadoActualizacion() {
         aria-valuenow={Math.round(estado.progreso * 100)}
       >
         <i
-          className={`block h-full ${retrasado ? "bg-amber-400" : "bg-[#60a5fa]"}`}
+          className={`block h-full rounded-full transition-[width] duration-500 ${color}`}
           style={{ width: `${Math.min(100, estado.progreso * 100)}%` }}
         />
       </div>
-    </Contenedor>
+
+      {retrasado && (
+        <p className="mt-2 text-[11px] leading-snug text-muted">
+          La ingesta puede demorar unos minutos.
+        </p>
+      )}
+    </div>
   );
 }
 
-function Contenedor({ children }: { children: React.ReactNode }) {
+function Panel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-col items-start gap-0.5 text-xs text-muted sm:ml-auto sm:items-end" aria-live="polite">
+    <div className="rounded-lg border border-line bg-surface-2 px-3.5 py-2.5" aria-live="polite">
       {children}
     </div>
   );

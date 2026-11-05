@@ -26,8 +26,14 @@ export default function SismoMarker({ sismo, esUltimo, onHover }: Props) {
       style={esUltimo ? { zIndex: Z_ULTIMO } : undefined}
     >
       <div
-        className="sismo-pulso cursor-pointer"
-        style={{ width: tam, height: tam, background: color, color, boxShadow: `0 0 14px ${color}` }}
+        className={`relative cursor-pointer rounded-full ${esUltimo ? "sismo-pulso" : ""}`}
+        style={{
+          width: tam,
+          height: tam,
+          background: color,
+          color,
+          boxShadow: "0 0 0 1.5px rgb(255 253 248 / 0.95), 0 1px 3px rgb(32 29 25 / 0.3)",
+        }}
         onMouseEnter={() => onHover(sismo)}
         onMouseLeave={() => onHover(null)}
       >
@@ -37,27 +43,37 @@ export default function SismoMarker({ sismo, esUltimo, onHover }: Props) {
   );
 }
 
-// Always-visible callout for the newest quake: connector line + dark glass card.
+// Always-visible callout for the newest quake: connector line + paper card.
 function EtiquetaUltimo({ sismo, color }: { sismo: Sismo; color: string }) {
   return (
     <div className="pointer-events-none absolute left-full top-1/2 flex -translate-y-1/2 items-center">
-      <span className="h-px w-4 bg-gradient-to-r from-transparent to-white/50" />
+      <span className="h-px w-3 bg-gradient-to-r from-transparent to-[#a39a8b]" />
       <div
-        className="rounded-lg border border-white/10 bg-[rgb(13_21_38/0.82)] px-2.5 py-1.5 shadow-[0_8px_24px_rgb(0_0_0/0.5)] backdrop-blur-md"
+        className="rounded-lg border border-line bg-surface/95 px-2.5 py-2 shadow-[0_10px_28px_rgba(32,29,25,0.16)] backdrop-blur-sm"
         style={{ borderLeft: `3px solid ${color}` }}
       >
-        <div className="flex items-center gap-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-400">
+        <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">
           <span className="relative flex size-1.5">
-            <span className="absolute inline-flex size-full animate-ping rounded-full opacity-75" style={{ background: color }} />
-            <span className="relative inline-flex size-1.5 rounded-full" style={{ background: color }} />
+            <span
+              className="absolute inline-flex size-full animate-ping rounded-full opacity-60"
+              style={{ background: color }}
+            />
+            <span
+              className="relative inline-flex size-1.5 rounded-full"
+              style={{ background: color }}
+            />
           </span>
           Último sismo
         </div>
-        <div className="mt-0.5 flex items-baseline gap-1.5 whitespace-nowrap">
-          <span className="text-base font-bold leading-none text-white">M {sismo.magnitud.toFixed(1)}</span>
-          <span className="max-w-[180px] truncate text-[11px] text-slate-300">{lugarEs(sismo.lugar)}</span>
+        <div className="mt-1 flex items-baseline gap-1.5 whitespace-nowrap">
+          <span className="text-[15px] font-semibold leading-none tabular-nums">
+            M {sismo.magnitud.toFixed(1)}
+          </span>
+          <span className="max-w-[180px] truncate text-[11px] text-ink-soft">
+            {lugarEs(sismo.lugar)}
+          </span>
         </div>
-        <div className="mt-0.5 whitespace-nowrap text-[10px] text-slate-400">{fechaHora(sismo.fecha)}</div>
+        <div className="mt-1 whitespace-nowrap text-[10px] text-muted">{fechaHora(sismo.fecha)}</div>
       </div>
     </div>
   );

@@ -30,7 +30,7 @@ export default function PlacasLayer({ visible }: Props) {
         layout={{ visibility }}
         paint={{
           "fill-color": colorPlaca,
-          "fill-opacity": ["case", ["boolean", ["feature-state", "hover"], false], 0.32, 0.14],
+          "fill-opacity": ["case", ["boolean", ["feature-state", "hover"], false], 0.28, 0.11],
         }}
       />
       {/* Soft glow + thin core line with round joins for a smoother edge. */}
@@ -38,13 +38,13 @@ export default function PlacasLayer({ visible }: Props) {
         id="placas-glow"
         type="line"
         layout={{ visibility, "line-join": "round", "line-cap": "round" }}
-        paint={{ "line-color": colorPlaca, "line-width": 8, "line-blur": 6, "line-opacity": 0.45 }}
+        paint={{ "line-color": colorPlaca, "line-width": 7, "line-blur": 6, "line-opacity": 0.3 }}
       />
       <Layer
         id="placas-line"
         type="line"
         layout={{ visibility, "line-join": "round", "line-cap": "round" }}
-        paint={{ "line-color": colorPlaca, "line-width": 1.2, "line-opacity": 0.9 }}
+        paint={{ "line-color": colorPlaca, "line-width": 1, "line-opacity": 0.8 }}
       />
       <Layer
         id="placas-nombres"
@@ -52,15 +52,15 @@ export default function PlacasLayer({ visible }: Props) {
         layout={{
           visibility,
           "text-field": nombrePlaca,
-          "text-size": 12,
+          "text-size": 11,
           "text-letter-spacing": 0.08,
           "text-transform": "uppercase",
         }}
         paint={{
-          "text-color": "#e2e8f0",
-          "text-halo-color": "#0b1220",
-          "text-halo-width": 1.5,
-          "text-opacity": 0.8,
+          "text-color": "#3d3933",
+          "text-halo-color": "#fbf9f4",
+          "text-halo-width": 1.6,
+          "text-opacity": 0.85,
         }}
       />
     </Source>

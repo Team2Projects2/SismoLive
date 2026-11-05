@@ -53,7 +53,7 @@ function textoSismo(s: Sismo): ReactNode {
   return (
     <>
       <div>{`${s.magnitud.toFixed(1)} M · ${lugarEs(s.lugar)} · ${profundidadTexto(s.profundidad)}`}</div>
-      <div className="mt-0.5 text-[11px] text-slate-400">{fechaHora(s.fecha)}</div>
+      <div className="mt-0.5 text-[11px] text-muted">{fechaHora(s.fecha)}</div>
     </>
   );
 }
@@ -81,6 +81,15 @@ export default function SismosMap({ sismos, volcanes, capas, foco }: Props) {
     if (foco) mapRef.current?.flyTo({ center: [foco.lng, foco.lat], zoom: 6, duration: 1200 });
   }, [foco]);
 
+  // Hiding the plate layer should not leave a hover or pinned card waiting to reappear.
+  useEffect(() => {
+    if (capas.placas) return;
+    // Resetting UI state when a layer is hidden is the intended use of this effect.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPlaca(null);
+    setPlacaFijada(null);
+  }, [capas.placas]);
+
   // Max zoom-out = the zoom that fits all of Chile (plus ZOOM_EXTRA); recomputed on resize.
   function ajustarZoomMinimo() {
     const map = mapRef.current?.getMap();
@@ -92,6 +101,12 @@ export default function SismosMap({ sismos, volcanes, capas, foco }: Props) {
   function onLoad() {
     // Keep pinch-zoom on touch screens but drop its two-finger rotation.
     mapRef.current?.getMap().touchZoomRotate.disableRotation();
+    ajustarZoomMinimo();
+    actualizarVista();
+  }
+
+  // Zoom limits and the screen-space volcano clustering both depend on the viewport size.
+  function onResize() {
     ajustarZoomMinimo();
     actualizarVista();
   }
@@ -140,6 +155,9 @@ export default function SismosMap({ sismos, volcanes, capas, foco }: Props) {
   }
 
   function onMouseMove(e: MapMouseEvent) {
+    // Plate hover is the only reason to run this handler; skip the projection loop otherwise.
+    if (!capas.placas) return;
+
     const destino = e.originalEvent.target as HTMLElement | null;
     // Moving inside the expanded card keeps it open.
     if (destino?.closest(".placa-fijada")) return;
@@ -203,8 +221,8 @@ export default function SismosMap({ sismos, volcanes, capas, foco }: Props) {
 
   if (!TOKEN) {
     return (
-      <div className="flex h-full items-center justify-center bg-panel p-6 text-center text-sm text-muted">
-        Falta <code className="mx-1 text-slate-200">NEXT_PUBLIC_MAPBOX_TOKEN</code> en .env.local
+      <div className="flex h-full items-center justify-center bg-surface-2 p-6 text-center text-[13px] text-muted">
+        Falta <code className="mx-1 font-medium text-ink">NEXT_PUBLIC_MAPBOX_TOKEN</code> en .env.local
       </div>
     );
   }
@@ -219,7 +237,8 @@ export default function SismosMap({ sismos, volcanes, capas, foco }: Props) {
     <Map
       ref={mapRef}
       mapboxAccessToken={TOKEN}
-      mapStyle="mapbox://styles/mapbox/dark-v11"
+      mapStyle="mapbox://styles/mapbox/light-v11"
+      language="es"
       initialViewState={{ bounds: CHILE, fitBoundsOptions: { padding: PADDING_CHILE } }}
       // Flat map: maxBounds behaves predictably in mercator (globe view would ignore the framing).
       projection="mercator"
@@ -242,12 +261,12 @@ export default function SismosMap({ sismos, volcanes, capas, foco }: Props) {
       }}
       onClick={onClick}
       onLoad={onLoad}
-      onResize={ajustarZoomMinimo}
+      onResize={onResize}
       onMoveEnd={actualizarVista}
     >
       {/* Mapbox requires both the wordmark and the text attribution; grouped bottom-left, compact. */}
       <AttributionControl position="bottom-left" compact />
-      <NavigationControl position="bottom-right" showCompass={false} />
+      <NavigationControl position="bottom-left" showCompass={false} />
       <PlacasLayer visible={capas.placas} />
 
       {capas.volcanes && (
