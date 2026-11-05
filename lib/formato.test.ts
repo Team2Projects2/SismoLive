@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fechaHora, haceTiempo, lugarEs } from "./formato";
+import { fechaHora, fechaHoraCorta, haceTiempo, lugarEs } from "./formato";
 
 describe("fechaHora", () => {
   it("shows the date and 24h time in Chile's time zone", () => {
@@ -9,6 +9,13 @@ describe("fechaHora", () => {
     expect(texto).toMatch(/2026/);
     expect(texto).toMatch(/22:41/);
     expect(texto).toMatch(/hora de Chile/);
+  });
+
+  it("keeps Chile's time zone in the compact card format", () => {
+    const texto = fechaHoraCorta("2026-11-03T01:41:27Z");
+    expect(texto).toMatch(/2 nov/);
+    expect(texto).toMatch(/22:41/);
+    expect(texto).not.toMatch(/2026/);
   });
 });
 
@@ -35,6 +42,12 @@ describe("lugarEs", () => {
     expect(lugarEs("offshore Coquimbo, Chile")).toBe("frente a la costa de Coquimbo, Chile");
     expect(lugarEs("off the coast of Aisen, Chile")).toBe("frente a la costa de Aisen, Chile");
     expect(lugarEs("near the coast of Tarapaca, Chile")).toBe("cerca de la costa de Tarapaca, Chile");
+  });
+
+  it("accepts USGS capitalised coastal prefixes", () => {
+    expect(lugarEs("Offshore Coquimbo, Chile")).toBe("frente a la costa de Coquimbo, Chile");
+    expect(lugarEs("Off the coast of Aisen, Chile")).toBe("frente a la costa de Aisen, Chile");
+    expect(lugarEs("Near the coast of Tarapaca, Chile")).toBe("cerca de la costa de Tarapaca, Chile");
   });
 
   it("leaves other places untouched", () => {

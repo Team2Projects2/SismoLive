@@ -6,23 +6,30 @@ const NIVELES_LEYENDA = [0, 1, 2, 3] as const;
 
 export default function Leyenda() {
   return (
-    <div className="map-overlay bottom-20 left-3 max-h-[calc(100%-156px)] max-w-[250px] overflow-y-auto">
-      <h4 className="mb-2 text-xs font-semibold text-muted">Magnitud</h4>
-      {LEYENDA_MAGNITUD.map((m) => (
-        <div key={m.color} className="my-0.5 flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full" style={{ background: m.color }} />
-          {m.etiqueta}
-        </div>
-      ))}
-      <h4 className="mb-2 mt-2.5 text-xs font-semibold text-muted">
-        Volcanes · Estado de Actividad (SERNAGEOMIN)
-      </h4>
-      {NIVELES_LEYENDA.map((n) => (
-        <div key={n} className="my-0.5 flex items-center gap-2">
-          <VolcanIcon nivel={n} ancho={26} />
-          {n === 3 ? "3–5 · Erupción" : `${n} · ${NIVEL_ETIQUETA[n]}`}
-        </div>
-      ))}
+    <div className="panel px-3.5 py-3">
+      <h3 className="label">Magnitud</h3>
+      <ul className="mt-2 flex flex-col gap-1.5">
+        {LEYENDA_MAGNITUD.map((m) => (
+          <li key={m.color} className="flex items-center gap-2 text-[12px] leading-tight text-ink-soft">
+            <span className="h-2.5 w-2.5 flex-none rounded-full" style={{ background: m.color }} />
+            {m.etiqueta}
+          </li>
+        ))}
+      </ul>
+
+      <h3 className="label mt-4 border-t border-line pt-3">Volcanes · EAV</h3>
+      <ul className="mt-2 flex flex-col gap-1.5">
+        {NIVELES_LEYENDA.map((n) => (
+          <li key={n} className="flex items-center gap-2 text-[12px] leading-tight text-ink-soft">
+            <VolcanIcon nivel={n} ancho={24} />
+            {n === 3 ? "3–5 · Erupción" : `${n} · ${NIVEL_ETIQUETA[n]}`}
+          </li>
+        ))}
+      </ul>
+
+      <p className="mt-3 border-t border-line pt-2 text-[10px] leading-snug text-muted">
+        Estado de Actividad Volcánica · SERNAGEOMIN
+      </p>
     </div>
   );
 }

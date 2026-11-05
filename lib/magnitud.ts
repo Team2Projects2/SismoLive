@@ -1,9 +1,9 @@
 export const LEYENDA_MAGNITUD = [
-  { color: "#b91c1c", etiqueta: "6.0+ Severo" },
-  { color: "#ef4444", etiqueta: "5.0 – 5.9 Fuerte" },
-  { color: "#f97316", etiqueta: "4.5 – 4.9 Moderado" },
-  { color: "#facc15", etiqueta: "4.0 – 4.4 Leve" },
-  { color: "#2dd4bf", etiqueta: "< 4.0 Menor" },
+  { color: "#7f1d1d", etiqueta: "6.0+ Severo" },
+  { color: "#b42318", etiqueta: "5.0 – 5.9 Fuerte" },
+  { color: "#c2410c", etiqueta: "4.5 – 4.9 Moderado" },
+  { color: "#a16207", etiqueta: "4.0 – 4.4 Leve" },
+  { color: "#0f766e", etiqueta: "< 4.0 Menor" },
 ] as const;
 
 export function colorPorMagnitud(magnitud: number): string {
@@ -15,5 +15,5 @@ export function colorPorMagnitud(magnitud: number): string {
 }
 
 export function tamanoPorMagnitud(magnitud: number): number {
-  return Math.max(7, 8 + (magnitud - 4) * 10);
+  return Math.max(7, Math.min(40, 8 + (magnitud - 4) * 9));
 }

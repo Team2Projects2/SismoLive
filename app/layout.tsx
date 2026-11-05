@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Poppins } from "next/font/google";
+import { Source_Sans_3, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const sourceSans = Source_Sans_3({
+  variable: "--font-source-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const poppins = Poppins({
-  variable: "--font-logo",
-  weight: "800",
+const sourceSerif = Source_Serif_4({
+  variable: "--font-source-serif",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -18,16 +19,25 @@ export const metadata: Metadata = {
   description: "Sismos y volcanes de Chile en tiempo real, con datos de USGS y SERNAGEOMIN.",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#f3f0e9",
+  colorScheme: "light",
+} as const;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="es"
-      className={`${geistSans.variable} ${poppins.variable} h-full antialiased`}
+      className={`${sourceSans.variable} ${sourceSerif.variable} h-full antialiased`}
       // Browser extensions inject attributes on <html> before hydration (e.g. data-yd-*).
       // This only ignores attribute mismatches on this element, not its children.
       suppressHydrationWarning
     >
-      <body className="flex min-h-full flex-col md:h-full">{children}</body>
+      <body className="min-h-full bg-bg font-sans text-ink lg:h-full lg:overflow-hidden">
+        {children}
+      </body>
     </html>
   );
 }

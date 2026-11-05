@@ -39,6 +39,9 @@ const csp = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  // Next 16 blocks cross-origin dev resources (HMR, client runtime) by default. Allowing
+  // 127.0.0.1 as well as localhost keeps both ways of opening the dev server working.
+  allowedDevOrigins: ["127.0.0.1"],
   async headers() {
     return [
       {

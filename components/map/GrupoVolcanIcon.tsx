@@ -33,7 +33,7 @@ export default function GrupoVolcanIcon({ nivel, cantidad, ancho }: Props) {
         </linearGradient>
       </defs>
 
-      <ellipse cx="25" cy="34" rx="23" ry="2" fill="#000" opacity=".35" />
+      <ellipse cx="25" cy="34" rx="23" ry="2" fill="#201d19" opacity=".18" />
       {CONOS.map(({ x, y, escala }) => (
         <g key={`${x}-${y}`} transform={`translate(${x} ${y}) scale(${escala})`}>
           <path d={CONO_D} fill={`url(#${id}m)`} stroke="#1f1610" strokeWidth=".8" />
@@ -41,14 +41,14 @@ export default function GrupoVolcanIcon({ nivel, cantidad, ancho }: Props) {
         </g>
       ))}
 
-      <circle cx="45" cy="29" r="6" fill={NIVEL_COLOR[nivel]} stroke="#0b1220" strokeWidth="1.2" />
+      <circle cx="45" cy="29" r="6" fill={NIVEL_COLOR[nivel]} stroke="#fbf9f4" strokeWidth="1.2" />
       <text
         x="45"
         y="31.4"
         textAnchor="middle"
         fontSize={cantidad > 9 ? "6" : "7"}
         fontWeight="700"
-        fill="#0b1220"
+        fill="#fffdf8"
         fontFamily="system-ui"
       >
         {cantidad}

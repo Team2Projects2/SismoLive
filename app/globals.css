@@ -1,39 +1,87 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #0b1220;
-  --color-panel: #111a2c;
-  --color-panel-2: #16223a;
-  --color-line: #23314d;
-  --color-foreground: #e6ecf5;
-  --color-muted: #8a97ad;
-  --color-accent: #ef4444;
-  --color-ok: #22c55e;
+  --color-bg: #f3f0e9;
+  --color-surface: #fbf9f4;
+  --color-surface-2: #f7f3eb;
+  --color-ink: #201d19;
+  --color-ink-soft: #46413a;
+  --color-muted: #6b6459;
+  --color-line: #ded7c9;
+  --color-line-strong: #c9c0b0;
+  --color-accent: #a33b2b;
+  --color-ok: #2f6b4f;
+  --color-warn: #8a5a12;
 }
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-logo: var(--font-logo);
+  --font-sans: var(--font-source-sans);
+  --font-display: var(--font-source-serif);
+}
+
+:root {
+  color-scheme: light;
 }
 
 body {
   background: var(--color-bg);
-  color: var(--color-foreground);
+  color: var(--color-ink);
   font-family: var(--font-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  font-feature-settings: "kern", "liga", "calt";
+  text-rendering: optimizeLegibility;
 }
 
-/* Overlays drawn on top of the map (layers panel, legend). */
-.map-overlay {
-  position: absolute;
-  z-index: 5;
-  background: rgb(13 21 38 / 0.92);
-  border: 1px solid var(--color-line);
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-size: 12px;
+::selection {
+  background: #e8cfc8;
+  color: var(--color-ink);
 }
 
-/* Inner earthquake dot; the Marker root must keep Mapbox's own positioning. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cfc7b7 transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #d5ccbc;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@layer components {
+  /* Floating map panels share the paper surface and a single, quiet shadow. */
+  .panel {
+    background: rgb(251 249 244 / 0.94);
+    border: 1px solid var(--color-line);
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgb(32 29 25 / 0.04), 0 12px 32px rgb(32 29 25 / 0.06);
+    backdrop-filter: blur(10px);
+  }
+
+  .label {
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+}
+
+/* Only the newest quake pulses; the rest stay quiet so the map reads as a map. */
 .sismo-pulso {
   position: relative;
   border-radius: 50%;
@@ -41,89 +89,134 @@ body {
 .sismo-pulso::after {
   content: "";
   position: absolute;
-  inset: -8px;
+  inset: -7px;
   border-radius: 50%;
-  border: 2px solid currentColor;
-  animation: sismo-ping 1.8s ease-out infinite;
+  border: 1.5px solid currentColor;
+  animation: sismo-ping 2.4s ease-out infinite;
 }
 @keyframes sismo-ping {
-  from { transform: scale(0.6); opacity: 0.9; }
-  to { transform: scale(1.8); opacity: 0; }
+  from {
+    transform: scale(0.7);
+    opacity: 0.55;
+  }
+  to {
+    transform: scale(1.9);
+    opacity: 0;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .sismo-pulso::after { animation: none; opacity: 0; }
+  .sismo-pulso::after {
+    animation: none;
+    opacity: 0;
+  }
 }
 
 /* mapbox-gl.css loads after this file, so selectors are scoped under .mapboxgl-map to win. */
-.mapboxgl-map .mapboxgl-popup-content {
-  background: rgb(13 21 38 / 0.96);
-  color: #e6ecf5;
-  border: 1px solid #3b4f75;
-  padding: 6px 10px;
-  font-size: 12px;
-  line-height: 1.4;
-  border-radius: 6px;
-  box-shadow: 0 6px 20px rgb(0 0 0 / 0.45);
+.mapboxgl-map {
+  font-family: var(--font-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
-.mapboxgl-map .mapboxgl-popup-tip { display: none; }
+.mapboxgl-map .mapboxgl-popup-content {
+  background: #fffdf8;
+  color: var(--color-ink);
+  border: 1px solid var(--color-line);
+  padding: 8px 11px;
+  font-size: 12px;
+  line-height: 1.45;
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgb(32 29 25 / 0.14);
+}
+.mapboxgl-map .mapboxgl-popup-tip {
+  display: none;
+}
 /* Markers use z-index up to ~20 to stack active volcanoes; popups must stay above all of them. */
-.mapboxgl-map .mapboxgl-popup { z-index: 50; pointer-events: none; }
+.mapboxgl-map .mapboxgl-popup {
+  z-index: 50;
+  pointer-events: none;
+}
 /* mapbox-gl.css re-enables pointer events on the content; hover popups must stay click-through,
    otherwise a fast cursor lands on the popup, "leaves" the plate and the highlight flickers. */
-.mapboxgl-map .mapboxgl-popup:not(.placa-fijada) .mapboxgl-popup-content { pointer-events: none; }
-/* Mapbox text attribution (required): restyled dark but kept legible, as Mapbox allows.
-   The legend sits above the bottom-left wordmark + attribution so they never overlap. */
-.mapboxgl-map .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl { margin: 0 0 10px 12px; }
+.mapboxgl-map .mapboxgl-popup:not(.placa-fijada) .mapboxgl-popup-content {
+  pointer-events: none;
+}
+
+/* Mapbox requires the wordmark and the text attribution. They sit bottom-left, away from
+   the legend on the right, and are restyled light but kept legible. */
+.mapboxgl-map .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl {
+  margin: 0 0 8px 10px;
+}
 .mapboxgl-map .mapboxgl-ctrl-attrib,
 .mapboxgl-map .mapboxgl-ctrl-attrib.mapboxgl-compact {
-  background: rgb(13 21 38 / 0.82);
-  color: #cbd5e1;
-  border: 1px solid rgb(255 255 255 / 0.1);
+  background: rgb(251 249 244 / 0.9);
+  color: #5f594f;
+  border: 1px solid rgb(32 29 25 / 0.08);
 }
-.mapboxgl-map .mapboxgl-ctrl-attrib a { color: #cbd5e1; }
-.mapboxgl-map .mapboxgl-ctrl-attrib a:hover { color: #fff; }
-.mapboxgl-map .mapboxgl-ctrl-attrib-button { filter: invert(1) brightness(1.2); }
+.mapboxgl-map .mapboxgl-ctrl-attrib a {
+  color: #5f594f;
+}
+.mapboxgl-map .mapboxgl-ctrl-attrib a:hover {
+  color: var(--color-ink);
+}
+.mapboxgl-map .mapboxgl-ctrl-attrib-button {
+  opacity: 0.65;
+}
 
-/* Zoom buttons: dark glass like the layers panel, light icons, soft hover. */
-.mapboxgl-map .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl { margin: 0 12px 12px 0; }
+/* Zoom buttons: paper glass, ink icons, soft hover. */
 .mapboxgl-map .mapboxgl-ctrl-group,
 .mapboxgl-map .mapboxgl-ctrl-group:not(:empty) {
-  background: rgb(13 21 38 / 0.82);
-  border: 1px solid rgb(255 255 255 / 0.1);
+  background: rgb(251 249 244 / 0.95);
+  border: 1px solid var(--color-line);
   border-radius: 10px;
-  box-shadow: 0 8px 24px rgb(0 0 0 / 0.45);
-  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 18px rgb(32 29 25 / 0.1);
   overflow: hidden;
 }
 .mapboxgl-map .mapboxgl-ctrl-group button {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   transition: background-color 150ms ease;
 }
-.mapboxgl-map .mapboxgl-ctrl-group button + button { border-top: 1px solid rgb(255 255 255 / 0.08); }
-.mapboxgl-map .mapboxgl-ctrl-group button:not(:disabled):hover { background: rgb(96 165 250 / 0.16); }
-.mapboxgl-map .mapboxgl-ctrl-group button:focus-visible { outline: 2px solid #60a5fa; outline-offset: -2px; }
-.mapboxgl-map .mapboxgl-ctrl-group button:disabled { opacity: 0.35; }
-.mapboxgl-map .mapboxgl-ctrl-group button .mapboxgl-ctrl-icon { background-repeat: no-repeat; background-position: center; background-size: 18px 18px; }
+.mapboxgl-map .mapboxgl-ctrl-group button + button {
+  border-top: 1px solid var(--color-line);
+}
+.mapboxgl-map .mapboxgl-ctrl-group button:not(:disabled):hover {
+  background: #f1ece2;
+}
+.mapboxgl-map .mapboxgl-ctrl-group button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+.mapboxgl-map .mapboxgl-ctrl-group button:disabled {
+  opacity: 0.35;
+}
+.mapboxgl-map .mapboxgl-ctrl-group button .mapboxgl-ctrl-icon {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 18px 18px;
+}
 .mapboxgl-map .mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in .mapboxgl-ctrl-icon {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e6ecf5' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23201d19' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E");
 }
 .mapboxgl-map .mapboxgl-ctrl button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e6ecf5' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23201d19' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E");
 }
 
 /* The pinned plate card is interactive (close button, text selection) and sits above hover popups. */
-.mapboxgl-map .mapboxgl-popup.placa-fijada { z-index: 60; pointer-events: auto; }
+.mapboxgl-map .mapboxgl-popup.placa-fijada {
+  z-index: 60;
+  pointer-events: auto;
+}
 .mapboxgl-map .placa-fijada .mapboxgl-popup-close-button {
-  color: #94a3b8;
+  color: #8a8275;
   font-size: 18px;
   line-height: 1;
-  padding: 6px 8px;
-  border-radius: 0 6px 0 6px;
+  padding: 5px 7px;
+  border-radius: 0 8px 0 8px;
 }
-.mapboxgl-map .placa-fijada .mapboxgl-popup-close-button:hover { color: #fff; background: rgb(255 255 255 / 0.08); }
+.mapboxgl-map .placa-fijada .mapboxgl-popup-close-button:hover {
+  color: var(--color-ink);
+  background: #f1ece2;
+}
 .mapboxgl-map .placa-popup .mapboxgl-popup-content {
   padding: 0;
   overflow: hidden;
-  width: 300px;
+  width: min(300px, calc(100vw - 44px));
 }

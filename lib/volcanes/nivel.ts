@@ -10,11 +10,12 @@ export const NIVEL_ETIQUETA: Record<NivelVolcan, string> = {
   5: "Erupción mayor",
 };
 
+// Muted enough to sit on the paper map without competing with the earthquake dots.
 export const NIVEL_COLOR: Record<NivelVolcan, string> = {
-  0: "#22c55e",
-  1: "#eab308",
-  2: "#f97316",
-  3: "#ef4444",
-  4: "#dc2626",
-  5: "#991b1b",
+  0: "#3f6b4f",
+  1: "#8a5a12",
+  2: "#c2410c",
+  3: "#b42318",
+  4: "#991b1b",
+  5: "#7f1d1d",
 };
