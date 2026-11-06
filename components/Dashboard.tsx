@@ -87,7 +87,8 @@ export default function Dashboard() {
           <div className="lg:pointer-events-auto">
             <CapasPanel capas={capas} onChange={setCapas} volcanesNoDisponibles={errorVolcanes} />
           </div>
-          <div className="min-h-0 lg:pointer-events-auto lg:flex-1 lg:overflow-y-auto">
+          {/* No flex-1: a stretched wrapper would catch map clicks in the empty space below the legend. */}
+          <div className="min-h-0 lg:pointer-events-auto lg:overflow-y-auto">
             <Leyenda />
           </div>
         </div>

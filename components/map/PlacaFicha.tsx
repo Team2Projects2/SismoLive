@@ -15,7 +15,7 @@ function Lista({ items }: { items: string[] }) {
 
 function Seccion({ titulo, children }: { titulo: string; children: React.ReactNode }) {
   return (
-    <div className="border-t border-line px-3.5 py-2.5 text-[11.5px] leading-relaxed text-ink-soft">
+    <div className="border-t border-line px-3.5 py-2 text-[11.5px] leading-snug text-ink-soft">
       <h5 className="label mb-1 text-[10px]">{titulo}</h5>
       {children}
     </div>
