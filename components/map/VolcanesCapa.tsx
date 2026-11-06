@@ -5,7 +5,10 @@ import GrupoVolcanMarker from "./GrupoVolcanMarker";
 import VolcanMarker from "./VolcanMarker";
 
 // Snapshot of the map projection, replaced on every load/moveend so grouping recomputes then.
-export type Vista = { proyectar: (lng: number, lat: number) => { x: number; y: number } };
+export type Vista = {
+  proyectar: (lng: number, lat: number) => { x: number; y: number };
+  ancho: number;
+};
 
 type Props = {
   volcanes: Volcan[];

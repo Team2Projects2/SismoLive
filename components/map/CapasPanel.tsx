@@ -1,3 +1,5 @@
+import CerrarBoton from "./CerrarBoton";
+
 export type Capas = { sismos: boolean; placas: boolean; volcanes: boolean };
 
 const ETIQUETAS: Record<keyof Capas, string> = {
@@ -10,14 +12,18 @@ type Props = {
   capas: Capas;
   onChange: (capas: Capas) => void;
   volcanesNoDisponibles: boolean;
+  onClose?: () => void;
 };
 
-export default function CapasPanel({ capas, onChange, volcanesNoDisponibles }: Props) {
+export default function CapasPanel({ capas, onChange, volcanesNoDisponibles, onClose }: Props) {
   return (
     <div className="panel px-3.5 py-3">
-      <h3 id="capas-title" className="label">
-        Capas
-      </h3>
+      <div className="flex items-center justify-between gap-2">
+        <h3 id="capas-title" className="label">
+          Capas
+        </h3>
+        {onClose && <CerrarBoton onClick={onClose} label="Cerrar capas" />}
+      </div>
       <div
         role="group"
         aria-labelledby="capas-title"

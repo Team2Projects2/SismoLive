@@ -135,7 +135,7 @@ body {
 }
 /* mapbox-gl.css re-enables pointer events on the content; hover popups must stay click-through,
    otherwise a fast cursor lands on the popup, "leaves" the plate and the highlight flickers. */
-.mapboxgl-map .mapboxgl-popup:not(.placa-fijada) .mapboxgl-popup-content {
+.mapboxgl-map .mapboxgl-popup:not(.placa-fijada):not(.sismo-fijado) .mapboxgl-popup-content {
   pointer-events: none;
 }
 
@@ -197,6 +197,24 @@ body {
 }
 .mapboxgl-map .mapboxgl-ctrl button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23201d19' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E");
+}
+
+/* Pinned quake detail: same interaction rules as the pinned plate card. */
+.mapboxgl-map .mapboxgl-popup.sismo-fijado {
+  z-index: 60;
+  pointer-events: auto;
+}
+.mapboxgl-map .sismo-fijado .mapboxgl-popup-content {
+  pointer-events: auto;
+}
+/* Keep the pointer only on the pinned detail; hover popups stay tip-less and light. */
+.mapboxgl-map .sismo-fijado .mapboxgl-popup-tip {
+  display: block;
+}
+.mapboxgl-map .sismo-popup .mapboxgl-popup-content {
+  padding: 0;
+  overflow: hidden;
+  width: min(280px, calc(100vw - 44px));
 }
 
 /* The pinned plate card is interactive (close button, text selection) and sits above hover popups. */

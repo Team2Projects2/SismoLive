@@ -5,11 +5,13 @@ import type { PopupOptions } from "mapbox-gl";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import Map, { AttributionControl, NavigationControl, Popup, type MapMouseEvent, type MapRef } from "react-map-gl/mapbox";
 import { fechaHora, lugarEs, profundidadTexto } from "@/lib/formato";
+import { magnitudMw, richterEstimado } from "@/lib/magnitud";
 import type { Sismo } from "@/lib/types";
 import { limitesGrupo, type GrupoVolcanes } from "@/lib/volcanes/agrupar";
 import type { Volcan } from "@/lib/volcanes/mapear";
 import { NIVEL_ETIQUETA } from "@/lib/volcanes/nivel";
 import type { Capas } from "./CapasPanel";
+import DetalleSismo from "./DetalleSismo";
 import GrupoFicha from "./GrupoFicha";
 import PlacaFicha from "./PlacaFicha";
 import PlacasLayer, { PLACAS_FILL, PLACAS_SOURCE } from "./PlacasLayer";
@@ -23,6 +25,8 @@ type Props = {
   volcanes: Volcan[];
   capas: Capas;
   foco: Foco | null;
+  mostrarUltimo: boolean;
+  onCerrarUltimo: () => void;
 };
 
 type Etiqueta = { lng: number; lat: number; contenido: ReactNode };
@@ -56,11 +60,16 @@ const OFFSET_FICHA = 16;
 const MARGEN_FICHA = 12;
 const ANCHO_FICHA = 300;
 const ALTO_MINIMO_FICHA = 140;
+// Newest-quake callout: card width, connector gap and edge margin (px).
+const ANCHO_ETIQUETA = 230;
+const OFFSET_ETIQUETA = 14;
+const MARGEN_ETIQUETA = 10;
+type LadoEtiqueta = "derecha" | "izquierda" | "arriba";
 
 function textoSismo(s: Sismo): ReactNode {
   return (
     <>
-      <div>{`${s.magnitud.toFixed(1)} M · ${lugarEs(s.lugar)} · ${profundidadTexto(s.profundidad)}`}</div>
+      <div>{`${magnitudMw(s.magnitud)} (${richterEstimado(s.magnitud)}) · ${lugarEs(s.lugar)} · ${profundidadTexto(s.profundidad)}`}</div>
       <div className="mt-0.5 text-[11px] text-muted">{fechaHora(s.fecha)}</div>
     </>
   );
@@ -78,13 +87,17 @@ function textoVolcan(v: Volcan): string {
     .join(" · ");
 }
 
-export default function SismosMap({ sismos, volcanes, capas, foco }: Props) {
+export default function SismosMap({ sismos, volcanes, capas, foco, mostrarUltimo, onCerrarUltimo }: Props) {
   const mapRef = useRef<MapRef>(null);
   const [etiqueta, setEtiqueta] = useState<Etiqueta | null>(null);
   const [placa, setPlaca] = useState<PlacaHover | null>(null);
   const [placaFijada, setPlacaFijada] = useState<PlacaFijada | null>(null);
+  const [detalle, setDetalle] = useState<Sismo | null>(null);
   const [vista, setVista] = useState<Vista | null>(null);
   const frameResize = useRef<number | null>(null);
+  // Distinguish a deliberate click from the click Mapbox may emit after a pan.
+  const huboArrastre = useRef(false);
+  const inicioClick = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(
     () => () => {
@@ -96,6 +109,23 @@ export default function SismosMap({ sismos, volcanes, capas, foco }: Props) {
   useEffect(() => {
     if (foco) mapRef.current?.flyTo({ center: [foco.lng, foco.lat], zoom: 6, duration: 1200 });
   }, [foco]);
+
+  // Escape is a second, keyboard-friendly way to close the pinned quake detail.
+  useEffect(() => {
+    if (!detalle) return;
+    function alTeclear(event: KeyboardEvent) {
+      if (event.key === "Escape") setDetalle(null);
+    }
+    document.addEventListener("keydown", alTeclear);
+    return () => document.removeEventListener("keydown", alTeclear);
+  }, [detalle]);
+
+  // The detail only makes sense while the quake layer is visible.
+  useEffect(() => {
+    if (capas.sismos) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hiding the layer drops its detail
+    setDetalle(null);
+  }, [capas.sismos]);
 
   // Hiding the plate layer should not leave a hover or pinned card waiting to reappear.
   useEffect(() => {
@@ -139,7 +169,17 @@ export default function SismosMap({ sismos, volcanes, capas, foco }: Props) {
   function actualizarVista() {
     const map = mapRef.current;
     if (!map) return;
-    setVista({ proyectar: (lng, lat) => map.project([lng, lat]) });
+    setVista({
+      proyectar: (lng, lat) => map.project([lng, lat]),
+      ancho: map.getContainer().clientWidth,
+    });
+  }
+
+  function seleccionarSismo(s: Sismo) {
+    setEtiqueta(null);
+    setPlacaFijada(null);
+    // Choosing a quake pins its detail. Only the card's X (or Escape) dismisses it.
+    setDetalle(s);
   }
 
   function acercarGrupo(grupo: GrupoVolcanes) {
@@ -239,10 +279,34 @@ export default function SismosMap({ sismos, volcanes, capas, foco }: Props) {
     setPlaca(null);
   }
 
+  function onMouseDown(e: MapMouseEvent) {
+    inicioClick.current = { x: e.point.x, y: e.point.y };
+    huboArrastre.current = false;
+  }
+
+  function onMouseUp(e: MapMouseEvent) {
+    const inicio = inicioClick.current;
+    inicioClick.current = null;
+    if (inicio && Math.hypot(e.point.x - inicio.x, e.point.y - inicio.y) > 4) {
+      huboArrastre.current = true;
+    }
+  }
+
+  function onDragStart() {
+    huboArrastre.current = true;
+  }
+
   // Click on a plate pins its full card; click on empty map closes it. Clicks on DOM markers
   // (volcanoes, quakes) bubble up here too, so only clicks that hit the map canvas count.
   function onClick(e: MapMouseEvent) {
     if ((e.originalEvent.target as HTMLElement | null)?.tagName !== "CANVAS") return;
+    // A pan ends with a click too in some input devices; that must not dismiss the card.
+    if (huboArrastre.current) {
+      huboArrastre.current = false;
+      return;
+    }
+    // A deliberate static click anywhere on the map closes the pinned quake detail.
+    setDetalle(null);
     const f = e.features?.[0] as
       | { id?: string | number; properties?: Record<string, unknown> | null }
       | undefined;
@@ -271,8 +335,21 @@ export default function SismosMap({ sismos, volcanes, capas, foco }: Props) {
   // Hover shows only the header, and not over the plate whose full card is already open.
   // A quake/volcano popup always wins over the plate hover.
   const mostrarPlaca =
-    capas.placas && placa && !etiqueta && placa.id !== placaFijada?.id ? placa : null;
+    capas.placas && placa && !etiqueta && !detalle && placa.id !== placaFijada?.id
+      ? placa
+      : null;
   const fijada = capas.placas ? placaFijada : null;
+
+  // Put the newest-quake callout where it does not leave the map: right, left, or above.
+  const ladoUltimo = (() => {
+    const primero = sismos[0];
+    if (!vista || !primero) return "derecha" as LadoEtiqueta;
+    const x = vista.proyectar(primero.lng, primero.lat).x;
+    const necesita = ANCHO_ETIQUETA + OFFSET_ETIQUETA + MARGEN_ETIQUETA;
+    if (x + necesita <= vista.ancho) return "derecha" as LadoEtiqueta;
+    if (x - necesita >= 0) return "izquierda" as LadoEtiqueta;
+    return "arriba" as LadoEtiqueta;
+  })();
 
   return (
     <Map
@@ -301,6 +378,9 @@ export default function SismosMap({ sismos, volcanes, capas, foco }: Props) {
         if (!hacia?.closest(".placa-fijada")) setPlacaFijada(null);
       }}
       onClick={onClick}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
+      onDragStart={onDragStart}
       onLoad={onLoad}
       onResize={onResize}
       onMoveEnd={actualizarVista}
@@ -314,12 +394,14 @@ export default function SismosMap({ sismos, volcanes, capas, foco }: Props) {
         <VolcanesCapa
           volcanes={volcanes}
           vista={vista}
-          onHoverVolcan={(x) =>
-            setEtiqueta(x && { lng: x.lng, lat: x.lat, contenido: textoVolcan(x) })
-          }
-          onHoverGrupo={(g) =>
-            setEtiqueta(g && { lng: g.lng, lat: g.lat, contenido: <GrupoFicha grupo={g} /> })
-          }
+          onHoverVolcan={(x) => {
+            if (!detalle) setEtiqueta(x && { lng: x.lng, lat: x.lat, contenido: textoVolcan(x) });
+          }}
+          onHoverGrupo={(g) => {
+            if (!detalle) {
+              setEtiqueta(g && { lng: g.lng, lat: g.lat, contenido: <GrupoFicha grupo={g} /> });
+            }
+          }}
           onClickGrupo={acercarGrupo}
         />
       )}
@@ -330,7 +412,13 @@ export default function SismosMap({ sismos, volcanes, capas, foco }: Props) {
             key={s.id}
             sismo={s}
             esUltimo={i === 0}
-            onHover={(x) => setEtiqueta(x && { lng: x.lng, lat: x.lat, contenido: textoSismo(x) })}
+            mostrarEtiqueta={i === 0 && mostrarUltimo && !detalle}
+            ladoEtiqueta={ladoUltimo}
+            onCerrarEtiqueta={onCerrarUltimo}
+            onSeleccionar={seleccionarSismo}
+            onHover={(x) => {
+              if (!detalle) setEtiqueta(x && { lng: x.lng, lat: x.lat, contenido: textoSismo(x) });
+            }}
           />
         ))}
 
@@ -343,6 +431,22 @@ export default function SismosMap({ sismos, volcanes, capas, foco }: Props) {
           offset={14}
         >
           {etiqueta.contenido}
+        </Popup>
+      )}
+
+      {detalle && (
+        <Popup
+          key={detalle.id}
+          longitude={detalle.lng}
+          latitude={detalle.lat}
+          closeButton={false}
+          closeOnClick={false}
+          focusAfterOpen={false}
+          offset={16}
+          maxWidth="320px"
+          className="sismo-popup sismo-fijado"
+        >
+          <DetalleSismo sismo={detalle} onCerrar={() => setDetalle(null)} />
         </Popup>
       )}
 
