@@ -6,6 +6,16 @@ export const LEYENDA_MAGNITUD = [
   { color: "#0f766e", etiqueta: "< 4.0 Menor" },
 ] as const;
 
+// Primary scale: USGS reports moment magnitude (Mw), the modern successor to Richter.
+export function magnitudMw(magnitud: number): string {
+  return `${magnitud.toFixed(1)} Mw`;
+}
+
+// Rough, deliberately labelled estimate for readers used to the Richter scale.
+export function richterEstimado(magnitud: number): string {
+  return `≈ ${magnitud.toFixed(1)} Richter`;
+}
+
 export function colorPorMagnitud(magnitud: number): string {
   if (magnitud >= 6) return LEYENDA_MAGNITUD[0].color;
   if (magnitud >= 5) return LEYENDA_MAGNITUD[1].color;
