@@ -1,5 +1,5 @@
 import { haceTiempo, lugarEs, profundidadTexto } from "@/lib/formato";
-import { colorPorMagnitud } from "@/lib/magnitud";
+import { colorPorMagnitud, magnitudMw, richterEstimado } from "@/lib/magnitud";
 import type { Sismo } from "@/lib/types";
 
 export type Pestana = "chile" | "todos";
@@ -85,9 +85,11 @@ export default function SismosRecientes({
                 />
                 <span className="min-w-0 flex-1">
                   <span className="flex items-baseline justify-between gap-3">
-                    <b className="text-[15px] font-semibold tabular-nums">
-                      {s.magnitud.toFixed(1)}
-                      <span className="ml-1 text-[11px] font-medium text-muted">M</span>
+                    <b
+                      className="text-[15px] font-semibold tabular-nums"
+                      title={richterEstimado(s.magnitud)}
+                    >
+                      {magnitudMw(s.magnitud)}
                     </b>
                     {ahora !== null && (
                       <time dateTime={s.fecha} className="shrink-0 text-[11.5px] tabular-nums text-muted">

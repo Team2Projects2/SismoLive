@@ -1,5 +1,5 @@
 import { fechaHoraCorta, haceTiempo, lugarEs } from "@/lib/formato";
-import { colorPorMagnitud } from "@/lib/magnitud";
+import { colorPorMagnitud, richterEstimado } from "@/lib/magnitud";
 import type { Sismo } from "@/lib/types";
 
 type Props = { sismo: Sismo | null; ahora: number | null; mensaje: string | null };
@@ -30,8 +30,9 @@ export default function UltimoSismo({ sismo, ahora, mensaje }: Props) {
             <span className="font-display text-[52px] leading-[0.85] tracking-[-0.03em] tabular-nums">
               {sismo.magnitud.toFixed(1)}
             </span>
-            <span className="text-[13px] font-semibold uppercase tracking-[0.16em] text-muted">
-              M
+            <span className="text-[11px] font-semibold tracking-[0.14em] text-muted">Mw</span>
+            <span className="text-[10px] leading-tight text-muted">
+              ({richterEstimado(sismo.magnitud)})
             </span>
           </div>
 
