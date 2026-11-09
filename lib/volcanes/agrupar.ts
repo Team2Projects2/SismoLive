@@ -3,7 +3,7 @@ import type { NivelVolcan, Volcan } from "./mapear";
 export type PuntoProyectado = { x: number; y: number; volcan: Volcan };
 
 export type GrupoVolcanes = {
-  nivel: NivelVolcan;
+  nivel: NivelVolcan | null;
   volcanes: Volcan[];
   lng: number;
   lat: number;
@@ -11,7 +11,8 @@ export type GrupoVolcanes = {
 
 export type Agrupacion = { sueltos: Volcan[]; grupos: GrupoVolcanes[] };
 
-// Only calm volcanoes (EAV 0-1) are grouped; active ones must always stay visible on their own.
+// Only calm volcanoes (EAV 0-1) and those without a level are grouped; active ones must always
+// stay visible on their own.
 export const NIVEL_MAX_AGRUPABLE = 1;
 export const RADIO_GRUPO_PX = 40;
 
@@ -50,7 +51,7 @@ export function agruparVolcanes(puntos: PuntoProyectado[], radio = RADIO_GRUPO_P
   puntos.forEach((semilla, i) => {
     if (asignado[i]) return;
     asignado[i] = true;
-    if (semilla.volcan.nivel > NIVEL_MAX_AGRUPABLE) {
+    if ((semilla.volcan.nivel ?? 0) > NIVEL_MAX_AGRUPABLE) {
       sueltos.push(semilla.volcan);
       return;
     }

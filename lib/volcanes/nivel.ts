@@ -19,3 +19,14 @@ export const NIVEL_COLOR: Record<NivelVolcan, string> = {
   4: "#991b1b",
   5: "#7f1d1d",
 };
+
+// Neutral badge for volcanoes whose activity level is unknown.
+export const COLOR_SIN_NIVEL = "#78716c";
+
+export function colorNivel(nivel: NivelVolcan | null): string {
+  return nivel === null ? COLOR_SIN_NIVEL : NIVEL_COLOR[nivel];
+}
+
+export function etiquetaNivel(nivel: NivelVolcan | null): string {
+  return nivel === null ? "Sin dato de actividad" : `EAV ${nivel}: ${NIVEL_ETIQUETA[nivel]}`;
+}

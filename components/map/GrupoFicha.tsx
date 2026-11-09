@@ -1,5 +1,5 @@
 import type { GrupoVolcanes } from "@/lib/volcanes/agrupar";
-import { NIVEL_COLOR, NIVEL_ETIQUETA } from "@/lib/volcanes/nivel";
+import { colorNivel, etiquetaNivel } from "@/lib/volcanes/nivel";
 
 const MAX_NOMBRES = 6;
 
@@ -12,9 +12,9 @@ export default function GrupoFicha({ grupo }: { grupo: GrupoVolcanes }) {
       <div className="mb-1.5 flex items-center gap-1.5 font-semibold text-ink">
         <span
           className="h-2.5 w-2.5 rounded-full"
-          style={{ background: NIVEL_COLOR[grupo.nivel] }}
+          style={{ background: colorNivel(grupo.nivel) }}
         />
-        {nombres.length} volcanes · EAV {grupo.nivel}: {NIVEL_ETIQUETA[grupo.nivel]}
+        {nombres.length} volcanes · {etiquetaNivel(grupo.nivel)}
       </div>
       <ul className="space-y-0.5">
         {nombres.slice(0, MAX_NOMBRES).map((n, i) => (

@@ -35,7 +35,12 @@ type PanelesMapa = Record<PanelMapa, boolean>;
 
 export default function Dashboard() {
   const { sismos, cargando, error } = useSismos();
-  const { volcanes, error: errorVolcanes } = useVolcanes();
+  const { volcanes, error: errorVolcanes, sinActividad } = useVolcanes();
+  const avisoVolcanes = errorVolcanes
+    ? "Volcanes no disponibles"
+    : sinActividad
+      ? "Sin datos de actividad volcánica"
+      : null;
   const ahora = useAhora();
   const [pestana, setPestana] = useState<Pestana>("chile");
   const [capas, setCapas] = useState<Capas>({ sismos: true, placas: false, volcanes: true });
@@ -215,7 +220,7 @@ export default function Dashboard() {
                 <CapasPanel
                   capas={capas}
                   onChange={setCapas}
-                  volcanesNoDisponibles={errorVolcanes}
+                  avisoVolcanes={avisoVolcanes}
                   onClose={() => cerrarPanel("capas")}
                 />
               </div>

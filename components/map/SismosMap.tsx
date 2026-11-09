@@ -9,7 +9,7 @@ import { magnitudMw, richterEstimado } from "@/lib/magnitud";
 import type { Sismo } from "@/lib/types";
 import { limitesGrupo, type GrupoVolcanes } from "@/lib/volcanes/agrupar";
 import type { Volcan } from "@/lib/volcanes/mapear";
-import { NIVEL_ETIQUETA } from "@/lib/volcanes/nivel";
+import { etiquetaNivel } from "@/lib/volcanes/nivel";
 import type { Capas } from "./CapasPanel";
 import DetalleSismo from "./DetalleSismo";
 import GrupoFicha from "./GrupoFicha";
@@ -79,7 +79,7 @@ function textoVolcan(v: Volcan): string {
   return [
     v.nombre,
     v.alturaMsnm !== null ? `${v.alturaMsnm} m` : null,
-    `EAV ${v.nivel}: ${NIVEL_ETIQUETA[v.nivel]}`,
+    etiquetaNivel(v.nivel),
     v.region,
     v.rankingRiesgo !== null ? `ranking de riesgo #${v.rankingRiesgo}` : null,
   ]

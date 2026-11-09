@@ -5,7 +5,8 @@ export type Volcan = {
   region: string | null;
   lat: number;
   lng: number;
-  nivel: NivelVolcan;
+  // null when no activity source is available (fallback catalog without EAV).
+  nivel: NivelVolcan | null;
   rankingRiesgo: number | null;
   alturaMsnm: number | null;
   actualizado: string | null;

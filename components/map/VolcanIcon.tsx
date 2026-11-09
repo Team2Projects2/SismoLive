@@ -1,6 +1,6 @@
 import { useId } from "react";
 import type { NivelVolcan } from "@/lib/volcanes/mapear";
-import { NIVEL_COLOR } from "@/lib/volcanes/nivel";
+import { colorNivel } from "@/lib/volcanes/nivel";
 
 type Bocanada = [cx: number, cy: number, r: number, opacidad: number];
 
@@ -16,13 +16,14 @@ export const CONO_D =
 export const NIEVE_D =
   "M17 12.5 L18.2 11.6 L20 12.6 L21.8 11.4 L23 12.5 C23.7 13.8 24.4 15 25 16.4 L23.6 15.6 L22.5 17 L21 15.4 L19.5 17.2 L18 15.5 L16.6 16.8 L15.2 15.8 C15.9 14.6 16.4 13.5 17 12.5 Z";
 
-type Props = { nivel: NivelVolcan; ancho: number };
+type Props = { nivel: NivelVolcan | null; ancho: number };
 
 export default function VolcanIcon({ nivel, ancho }: Props) {
   // useId output can contain characters (":", "«") that break url(#...) references; keep safe ones.
   const id = `v${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
-  const erupcion = nivel >= 3;
-  const bocanadas = erupcion ? CENIZA : (HUMO[nivel] ?? []);
+  // Unknown level: draw a calm cone with a "–" badge instead of guessing activity.
+  const erupcion = nivel !== null && nivel >= 3;
+  const bocanadas = erupcion ? CENIZA : nivel === null ? [] : (HUMO[nivel] ?? []);
   const rellenoHumo = `url(#${id}${erupcion ? "a" : "s"})`;
 
   return (
@@ -109,7 +110,7 @@ export default function VolcanIcon({ nivel, ancho }: Props) {
         </>
       )}
 
-      <circle cx="35" cy="30" r="4.2" fill={NIVEL_COLOR[nivel]} stroke="#fbf9f4" strokeWidth="1.2" />
+      <circle cx="35" cy="30" r="4.2" fill={colorNivel(nivel)} stroke="#fbf9f4" strokeWidth="1.2" />
       <text
         x="35"
         y="31.8"
@@ -119,7 +120,7 @@ export default function VolcanIcon({ nivel, ancho }: Props) {
         fill="#fffdf8"
         fontFamily="system-ui"
       >
-        {nivel}
+        {nivel ?? "–"}
       </text>
     </svg>
   );

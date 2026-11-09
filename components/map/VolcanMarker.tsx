@@ -8,7 +8,8 @@ type Props = {
 };
 
 export default function VolcanMarker({ volcan, onHover }: Props) {
-  const activo = volcan.nivel >= 2;
+  const nivel = volcan.nivel ?? 0;
+  const activo = nivel >= 2;
   return (
     <Marker
       longitude={volcan.lng}
@@ -16,7 +17,7 @@ export default function VolcanMarker({ volcan, onHover }: Props) {
       // Bottom anchor keeps the cone base on the real location at every zoom.
       anchor="bottom"
       // Higher activity is drawn above calmer volcanoes and earthquake dots.
-      style={{ zIndex: activo ? 10 + volcan.nivel : 1 }}
+      style={{ zIndex: activo ? 10 + nivel : 1 }}
     >
       <div
         className="cursor-pointer"

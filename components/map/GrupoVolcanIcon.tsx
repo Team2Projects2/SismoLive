@@ -1,6 +1,6 @@
 import { useId } from "react";
 import type { NivelVolcan } from "@/lib/volcanes/mapear";
-import { NIVEL_COLOR } from "@/lib/volcanes/nivel";
+import { colorNivel } from "@/lib/volcanes/nivel";
 import { CONO_D, NIEVE_D } from "./VolcanIcon";
 
 // Back-left, back-right, then front-center so the middle cone overlaps the others.
@@ -10,7 +10,7 @@ const CONOS = [
   { x: 9.5, y: 6.8, escala: 0.8 },
 ] as const;
 
-type Props = { nivel: NivelVolcan; cantidad: number; ancho: number };
+type Props = { nivel: NivelVolcan | null; cantidad: number; ancho: number };
 
 export default function GrupoVolcanIcon({ nivel, cantidad, ancho }: Props) {
   // useId output can contain characters (":", "«") that break url(#...) references; keep safe ones.
@@ -41,7 +41,7 @@ export default function GrupoVolcanIcon({ nivel, cantidad, ancho }: Props) {
         </g>
       ))}
 
-      <circle cx="45" cy="29" r="6" fill={NIVEL_COLOR[nivel]} stroke="#fbf9f4" strokeWidth="1.2" />
+      <circle cx="45" cy="29" r="6" fill={colorNivel(nivel)} stroke="#fbf9f4" strokeWidth="1.2" />
       <text
         x="45"
         y="31.4"
