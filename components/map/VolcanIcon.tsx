@@ -21,7 +21,7 @@ type Props = { nivel: NivelVolcan | null; ancho: number };
 export default function VolcanIcon({ nivel, ancho }: Props) {
   // useId output can contain characters (":", "«") that break url(#...) references; keep safe ones.
   const id = `v${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
-  // Unknown level: draw a calm cone with a "–" badge instead of guessing activity.
+  // Unknown level: draw a calm cone instead of guessing activity.
   const erupcion = nivel !== null && nivel >= 3;
   const bocanadas = erupcion ? CENIZA : nivel === null ? [] : (HUMO[nivel] ?? []);
   const rellenoHumo = `url(#${id}${erupcion ? "a" : "s"})`;
@@ -110,18 +110,23 @@ export default function VolcanIcon({ nivel, ancho }: Props) {
         </>
       )}
 
-      <circle cx="35" cy="30" r="4.2" fill={colorNivel(nivel)} stroke="#fbf9f4" strokeWidth="1.2" />
-      <text
-        x="35"
-        y="31.8"
-        textAnchor="middle"
-        fontSize="5.5"
-        fontWeight="700"
-        fill="#fffdf8"
-        fontFamily="system-ui"
-      >
-        {nivel ?? "–"}
-      </text>
+      {/* No badge without a level: the bare cone says "volcano", the card says "no data". */}
+      {nivel !== null && (
+        <>
+          <circle cx="35" cy="30" r="4.2" fill={colorNivel(nivel)} stroke="#fbf9f4" strokeWidth="1.2" />
+          <text
+            x="35"
+            y="31.8"
+            textAnchor="middle"
+            fontSize="5.5"
+            fontWeight="700"
+            fill="#fffdf8"
+            fontFamily="system-ui"
+          >
+            {nivel}
+          </text>
+        </>
+      )}
     </svg>
   );
 }

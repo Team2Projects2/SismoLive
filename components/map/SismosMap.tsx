@@ -9,7 +9,6 @@ import { magnitudMw, richterEstimado } from "@/lib/magnitud";
 import type { Sismo } from "@/lib/types";
 import { limitesGrupo, type GrupoVolcanes } from "@/lib/volcanes/agrupar";
 import type { Volcan } from "@/lib/volcanes/mapear";
-import { etiquetaNivel } from "@/lib/volcanes/nivel";
 import type { Capas } from "./CapasPanel";
 import DetalleSismo from "./DetalleSismo";
 import GrupoFicha from "./GrupoFicha";
@@ -17,6 +16,7 @@ import PlacaFicha from "./PlacaFicha";
 import PlacasLayer, { PLACAS_FILL, PLACAS_SOURCE } from "./PlacasLayer";
 import SismoMarker from "./SismoMarker";
 import VolcanesCapa, { type Vista } from "./VolcanesCapa";
+import VolcanFicha from "./VolcanFicha";
 
 export type Foco = { lng: number; lat: number; n: number };
 
@@ -29,7 +29,8 @@ type Props = {
   onCerrarUltimo: () => void;
 };
 
-type Etiqueta = { lng: number; lat: number; contenido: ReactNode };
+// `ficha`: rich card (volcanoes) drawn edge to edge, lifted clear of the marker icon.
+type Etiqueta = { lng: number; lat: number; contenido: ReactNode; ficha?: boolean };
 type PlacaHover = { id: number; code: string; nombre: string; lng: number; lat: number };
 // The pinned card opens toward the side with more room and scrolls within it.
 type PlacaFijada = PlacaHover & { anchor: NonNullable<PopupOptions["anchor"]>; maxAlto: number };
@@ -64,6 +65,28 @@ const ALTO_MINIMO_FICHA = 140;
 const ANCHO_ETIQUETA = 230;
 const OFFSET_ETIQUETA = 14;
 const MARGEN_ETIQUETA = 10;
+
+// Volcano icons stand up to ~36 px above their point; keep the card from covering the cone.
+// The marker sits on its bottom-center, so the icon fills x ∈ [-20, 20], y ∈ [-36, 0] around the
+// point. Every anchor Mapbox may pick near the viewport edges needs an offset, corners included:
+// a missing key means [0, 0] and the card lands on the cone.
+const ALTO_ICONO_VOLCAN = 36;
+const MEDIO_ANCHO_ICONO_VOLCAN = 20;
+const SEPARACION = 6;
+const ARRIBA = -(ALTO_ICONO_VOLCAN + SEPARACION);
+const ABAJO = SEPARACION;
+const LADO = MEDIO_ANCHO_ICONO_VOLCAN + SEPARACION;
+const OFFSET_FICHA_VOLCAN: PopupOptions["offset"] = {
+  center: [0, ARRIBA],
+  top: [0, ABAJO],
+  "top-left": [0, ABAJO],
+  "top-right": [0, ABAJO],
+  bottom: [0, ARRIBA],
+  "bottom-left": [0, ARRIBA],
+  "bottom-right": [0, ARRIBA],
+  left: [LADO, -ALTO_ICONO_VOLCAN / 2],
+  right: [-LADO, -ALTO_ICONO_VOLCAN / 2],
+};
 type LadoEtiqueta = "derecha" | "izquierda" | "arriba";
 
 function textoSismo(s: Sismo): ReactNode {
@@ -73,18 +96,6 @@ function textoSismo(s: Sismo): ReactNode {
       <div className="mt-0.5 text-[11px] text-muted">{fechaHora(s.fecha)}</div>
     </>
   );
-}
-
-function textoVolcan(v: Volcan): string {
-  return [
-    v.nombre,
-    v.alturaMsnm !== null ? `${v.alturaMsnm} m` : null,
-    etiquetaNivel(v.nivel),
-    v.region,
-    v.rankingRiesgo !== null ? `ranking de riesgo #${v.rankingRiesgo}` : null,
-  ]
-    .filter(Boolean)
-    .join(" · ");
 }
 
 export default function SismosMap({ sismos, volcanes, capas, foco, mostrarUltimo, onCerrarUltimo }: Props) {
@@ -395,11 +406,11 @@ export default function SismosMap({ sismos, volcanes, capas, foco, mostrarUltimo
           volcanes={volcanes}
           vista={vista}
           onHoverVolcan={(x) => {
-            if (!detalle) setEtiqueta(x && { lng: x.lng, lat: x.lat, contenido: textoVolcan(x) });
+            if (!detalle) setEtiqueta(x && { lng: x.lng, lat: x.lat, contenido: <VolcanFicha volcan={x} />, ficha: true });
           }}
           onHoverGrupo={(g) => {
             if (!detalle) {
-              setEtiqueta(g && { lng: g.lng, lat: g.lat, contenido: <GrupoFicha grupo={g} /> });
+              setEtiqueta(g && { lng: g.lng, lat: g.lat, contenido: <GrupoFicha grupo={g} />, ficha: true });
             }
           }}
           onClickGrupo={acercarGrupo}
@@ -428,7 +439,9 @@ export default function SismosMap({ sismos, volcanes, capas, foco, mostrarUltimo
           latitude={etiqueta.lat}
           closeButton={false}
           closeOnClick={false}
-          offset={14}
+          offset={etiqueta.ficha ? OFFSET_FICHA_VOLCAN : 14}
+          maxWidth="260px"
+          className={etiqueta.ficha ? "volcan-popup" : undefined}
         >
           {etiqueta.contenido}
         </Popup>

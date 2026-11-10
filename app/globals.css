@@ -233,8 +233,15 @@ body {
   color: var(--color-ink);
   background: #f1ece2;
 }
+/* Volcano hover cards share the plate card anatomy: flush content, color rule on the left. */
+.mapboxgl-map .volcan-popup .mapboxgl-popup-content {
+  padding: 0;
+  overflow: hidden;
+  width: min(240px, calc(100vw - 44px));
+}
 .mapboxgl-map .placa-popup .mapboxgl-popup-content {
   padding: 0;
   overflow: hidden;
   width: min(300px, calc(100vw - 44px));
 }
+
