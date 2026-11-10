@@ -12,6 +12,7 @@ import {
 import GrupoVolcanMarker from "./GrupoVolcanMarker";
 import VolcanIcon from "./VolcanIcon";
 import VolcanMarker from "./VolcanMarker";
+import VolcanesNombresReserva from "./VolcanesNombresReserva";
 
 // Snapshot of the map projection, replaced on every load/moveend so grouping recomputes then.
 export type Vista = {
@@ -27,6 +28,9 @@ type Props = {
   onHoverGrupo: (grupo: GrupoVolcanes | null) => void;
   onClickGrupo: (grupo: GrupoVolcanes) => void;
 };
+
+// From here on volcanoes are mostly loose and there is room to name them.
+const ZOOM_NOMBRES = 7;
 
 // Must cover the longest animation in globals.css (group pop-in: 200 ms delay + 520 ms).
 const DURACION_TRANSICION_MS = 750;
@@ -66,6 +70,7 @@ export default function VolcanesCapa({
 
   return (
     <>
+      <VolcanesNombresReserva volcanes={agrupacion.sueltos} minZoom={ZOOM_NOMBRES} />
       {agrupacion.sueltos.map((v) => {
         const clave = claveVolcan(v);
         return (
@@ -74,6 +79,7 @@ export default function VolcanesCapa({
             volcan={v}
             onHover={onHoverVolcan}
             desde={transicion?.entradas.get(clave)}
+            conNombre={(vista?.zoom ?? 0) >= ZOOM_NOMBRES}
           />
         );
       })}

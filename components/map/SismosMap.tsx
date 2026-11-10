@@ -65,6 +65,8 @@ const ALTO_MINIMO_FICHA = 140;
 const ANCHO_ETIQUETA = 230;
 const OFFSET_ETIQUETA = 14;
 const MARGEN_ETIQUETA = 10;
+// Peak/landform labels layer of mapbox/light-v11.
+const CAPA_CUMBRES = "natural-point-label";
 
 // Volcano icons stand up to ~36 px above their point; keep the card from covering the cone.
 // The marker sits on its bottom-center, so the icon fills x ∈ [-20, 20], y ∈ [-36, 0] around the
@@ -161,8 +163,20 @@ export default function SismosMap({ sismos, volcanes, capas, foco, mostrarUltimo
   function onLoad() {
     // Keep pinch-zoom on touch screens but drop its two-finger rotation.
     mapRef.current?.getMap().touchZoomRotate.disableRotation();
+    ocultarVolcanesDelMapaBase();
     ajustarZoomMinimo();
     actualizarVista();
+  }
+
+  // The base style labels volcano summits ("Volcán Osorno") right where our cones stand, so the
+  // cone covers the text. We draw our own names under the cones; drop only the volcano labels
+  // from the base style and keep every other peak (Aconcagua, etc.).
+  function ocultarVolcanesDelMapaBase() {
+    const map = mapRef.current?.getMap();
+    if (!map?.getLayer(CAPA_CUMBRES)) return;
+    const esVolcan = ["any", ["==", ["get", "maki"], "volcano"], ["in", "Volc", ["get", "name"]]];
+    const actual = map.getFilter(CAPA_CUMBRES);
+    map.setFilter(CAPA_CUMBRES, actual ? ["all", actual, ["!", esVolcan]] : ["!", esVolcan]);
   }
 
   // Zoom limits and the screen-space volcano clustering both depend on the viewport size.

@@ -282,3 +282,11 @@ body {
     animation: none;
   }
 }
+
+/* Our volcano names, set like the base map's own labels: paper halo so they read on any terrain. */
+.volcan-nombre {
+  text-shadow:
+    0 0 2px #fbf9f4,
+    0 0 2px #fbf9f4,
+    0 0 4px #fbf9f4;
+}
