@@ -10,7 +10,7 @@
     "db:reset": "supabase db reset",
     "db:types": "supabase gen types typescript --local > lib/database.types.ts",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "ingest": "tsx scripts/ingest.ts"
   },
   "engines": {
