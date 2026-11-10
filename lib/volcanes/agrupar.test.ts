@@ -1,16 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { agruparVolcanes, type PuntoProyectado } from "./agrupar";
+import { agruparVolcanes, RADIO_GRUPO_PX, radioPorZoom, type PuntoProyectado } from "./agrupar";
 import type { NivelVolcan, Volcan } from "./mapear";
 
 function volcan(nombre: string, nivel: NivelVolcan, lng = -70, lat = -30): Volcan {
   return {
     nombre,
     region: null,
+    pais: null,
     lat,
     lng,
     nivel,
     rankingRiesgo: null,
     alturaMsnm: null,
+    tipo: null,
+    ultimaErupcion: null,
     actualizado: null,
   };
 }
@@ -60,5 +63,15 @@ describe("agruparVolcanes", () => {
     ]);
     expect(grupos).toEqual([]);
     expect(sueltos).toHaveLength(2);
+  });
+});
+
+describe("radioPorZoom", () => {
+  it("groups more when zoomed out and settles at the base radius up close", () => {
+    expect(radioPorZoom(3)).toBe(110);
+    expect(radioPorZoom(4)).toBe(110);
+    expect(radioPorZoom(5.5)).toBe(75);
+    expect(radioPorZoom(7)).toBe(RADIO_GRUPO_PX);
+    expect(radioPorZoom(12)).toBe(RADIO_GRUPO_PX);
   });
 });

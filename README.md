@@ -34,7 +34,7 @@ Other scripts: `npm test`, `npm run typecheck`, `npm run lint`, `npm run db:type
 ## How data flows
 
 - **Earthquakes**: `scripts/ingest.ts` downloads the USGS 2.5+ weekly feed, validates each feature and upserts it into `public.sismos`, then stamps `public.ingestas.ultima`. A GitHub Actions workflow (`.github/workflows/ingest.yml`) runs it every 10 minutes. The browser reads with the publishable key (RLS: read only) and listens to Realtime changes.
-- **Volcanoes**: `app/api/volcanes/route.ts` fetches the SERNAGEOMIN RNVV API server-side, validates it and caches it for 10 minutes.
+- **Volcanoes**: `app/api/volcanes/route.ts` fetches the SERNAGEOMIN RNVV API server-side, validates it and caches it for 10 minutes. The API requires a key: set `RNVV_API_KEY` (server-only, never `NEXT_PUBLIC_`); without it (or if RNVV fails) the route serves our committed catalog `lib/volcanes/catalogo.json` (volcanoes with a documented eruption in Chile and nearby areas of Peru, Bolivia and Argentina: country, location, altitude, type, last eruption), with no activity level, and the layers panel shows "Sin datos de actividad volcánica". When RNVV works, the catalog fills in each volcano's last eruption. The catalog was seeded from Smithsonian GVP with `npm run volcanes:catalogo` and is edited by hand from SERNAGEOMIN reports (rerunning the script overwrites manual edits).
 - **Tectonic plates**: static GeoJSON in `public/data/pb2002-plates.json`.
 
 To run the ingest against local Supabase:

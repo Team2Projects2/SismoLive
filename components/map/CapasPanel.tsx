@@ -11,11 +11,12 @@ const ETIQUETAS: Record<keyof Capas, string> = {
 type Props = {
   capas: Capas;
   onChange: (capas: Capas) => void;
-  volcanesNoDisponibles: boolean;
+  // Warning shown under the toggles while the volcano layer is on, e.g. missing activity data.
+  avisoVolcanes: string | null;
   onClose?: () => void;
 };
 
-export default function CapasPanel({ capas, onChange, volcanesNoDisponibles, onClose }: Props) {
+export default function CapasPanel({ capas, onChange, avisoVolcanes, onClose }: Props) {
   return (
     <div className="panel px-3.5 py-3">
       <div className="flex items-center justify-between gap-2">
@@ -55,9 +56,9 @@ export default function CapasPanel({ capas, onChange, volcanesNoDisponibles, onC
         ))}
       </div>
 
-      {volcanesNoDisponibles && capas.volcanes && (
-        <p className="mt-2.5 border-t border-line pt-2 text-[11px] leading-snug text-warn">
-          Volcanes no disponibles
+      {avisoVolcanes && capas.volcanes && (
+        <p role="status" className="mt-2.5 border-t border-line pt-2 text-[11px] leading-snug text-warn">
+          {avisoVolcanes}
         </p>
       )}
     </div>

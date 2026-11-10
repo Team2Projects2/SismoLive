@@ -19,3 +19,21 @@ export const NIVEL_COLOR: Record<NivelVolcan, string> = {
   4: "#991b1b",
   5: "#7f1d1d",
 };
+
+// Warm basalt for volcanoes whose activity level is unknown: reads as rock on the paper map,
+// not as a level, and stays apart from the green "estado base".
+export const COLOR_SIN_NIVEL = "#6b5d50";
+
+export function colorNivel(nivel: NivelVolcan | null): string {
+  return nivel === null ? COLOR_SIN_NIVEL : NIVEL_COLOR[nivel];
+}
+
+// 2847 -> "2.847 m"
+export function altitudTexto(metros: number): string {
+  return `${Math.round(metros).toLocaleString("es-CL")} m`;
+}
+
+// 2025 -> "2025"; -320 -> "320 a. C."
+export function anioTexto(anio: number): string {
+  return anio < 0 ? `${Math.abs(anio)} a. C.` : String(anio);
+}

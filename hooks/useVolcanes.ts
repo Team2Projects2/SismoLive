@@ -1,9 +1,9 @@
 "use client";
 
 import useSWR from "swr";
-import type { Volcan } from "@/lib/volcanes/mapear";
+import type { DatosVolcanes } from "@/lib/volcanes/fuente";
 
-async function cargar(): Promise<Volcan[]> {
+async function cargar(): Promise<DatosVolcanes> {
   const res = await fetch("/api/volcanes");
   if (!res.ok) throw new Error(`Volcanes: ${res.status}`);
   return res.json();
@@ -11,5 +11,9 @@ async function cargar(): Promise<Volcan[]> {
 
 export function useVolcanes() {
   const { data, error } = useSWR("volcanes", cargar, { refreshInterval: 600_000 });
-  return { volcanes: data ?? [], error: !!error };
+  return {
+    volcanes: data?.volcanes ?? [],
+    error: !!error,
+    sinActividad: data !== undefined && !data.conActividad,
+  };
 }

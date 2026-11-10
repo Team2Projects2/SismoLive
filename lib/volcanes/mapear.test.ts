@@ -22,11 +22,14 @@ describe("registroAVolcan", () => {
     expect(registroAVolcan(registro())).toEqual({
       nombre: "Campo Volcánico Carrán-Los Venados",
       region: "Los Ríos",
+      pais: "Chile",
       lat: -40.366,
       lng: -72.073,
       nivel: 0,
       rankingRiesgo: 6,
       alturaMsnm: 1114,
+      tipo: "Campo Volcánico",
+      ultimaErupcion: null,
       actualizado: "2026-11-03T12:00:15.977Z",
     });
   });
