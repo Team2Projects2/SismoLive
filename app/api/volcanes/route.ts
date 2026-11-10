@@ -1,17 +1,24 @@
 import { unstable_cache } from "next/cache";
+import { combinarConCatalogo, volcanesDelCatalogo } from "@/lib/volcanes/catalogo";
 import { obtenerDatosVolcanes } from "@/lib/volcanes/fuente";
-import { obtenerVolcanesGvp } from "@/lib/volcanes/gvp";
 import { obtenerVolcanes } from "@/lib/volcanes/rnvv";
 
 function registrarFallo(error: unknown) {
-  console.warn("RNVV unavailable, using GVP catalog:", error instanceof Error ? error.message : "unknown error");
+  console.warn("RNVV unavailable, using local catalog:", error instanceof Error ? error.message : "unknown error");
 }
 
-// Only successful results are cached; a failed call is retried on the next request.
-// A fallback result (conActividad: false) is cached too, so RNVV is retried every 10 minutes.
+// SERNAGEOMIN (RNVV) first: it gives the activity level, and our committed catalog adds the last
+// eruption and the neighbor-country volcanoes. If RNVV fails (or RNVV_API_KEY is missing) the
+// catalog alone is served, flagged conActividad: false. That result is cached too, so RNVV is
+// retried every 10 minutes.
 const volcanesEnCache = unstable_cache(
-  () => obtenerDatosVolcanes(obtenerVolcanes, obtenerVolcanesGvp, registrarFallo),
-  ["volcanes-v2"],
+  () =>
+    obtenerDatosVolcanes(
+      async () => combinarConCatalogo(await obtenerVolcanes()),
+      async () => volcanesDelCatalogo(),
+      registrarFallo,
+    ),
+  ["volcanes-v6"],
   { revalidate: 600 },
 );
 

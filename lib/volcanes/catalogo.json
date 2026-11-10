@@ -1,0 +1,641 @@
+[
+  {
+    "nombre": "Andahua-Orcopampa",
+    "pais": "Perú",
+    "lat": -15.42,
+    "lng": -72.33,
+    "alturaMsnm": 4713,
+    "tipo": "Campo volcánico",
+    "ultimaErupcion": 1490
+  },
+  {
+    "nombre": "Huambo",
+    "pais": "Perú",
+    "lat": -15.78,
+    "lng": -72.08,
+    "alturaMsnm": 4554,
+    "tipo": "Campo volcánico",
+    "ultimaErupcion": -700
+  },
+  {
+    "nombre": "Sabancaya",
+    "pais": "Perú",
+    "lat": -15.787,
+    "lng": -71.857,
+    "alturaMsnm": 5960,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 2026
+  },
+  {
+    "nombre": "El Misti",
+    "pais": "Perú",
+    "lat": -16.2991,
+    "lng": -71.4056,
+    "alturaMsnm": 5793,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1985
+  },
+  {
+    "nombre": "Ubinas",
+    "pais": "Perú",
+    "lat": -16.345,
+    "lng": -70.8972,
+    "alturaMsnm": 5608,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 2024
+  },
+  {
+    "nombre": "Huaynaputina",
+    "pais": "Perú",
+    "lat": -16.6144,
+    "lng": -70.8542,
+    "alturaMsnm": 4679,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1600
+  },
+  {
+    "nombre": "Ticsani",
+    "pais": "Perú",
+    "lat": -16.7586,
+    "lng": -70.5981,
+    "alturaMsnm": 5382,
+    "tipo": "Domo de lava",
+    "ultimaErupcion": 1800
+  },
+  {
+    "nombre": "Tutupaca",
+    "pais": "Perú",
+    "lat": -17.026,
+    "lng": -70.372,
+    "alturaMsnm": 5801,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1802
+  },
+  {
+    "nombre": "Yucamane",
+    "pais": "Perú",
+    "lat": -17.184,
+    "lng": -70.196,
+    "alturaMsnm": 5495,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": -1320
+  },
+  {
+    "nombre": "Taapaca",
+    "pais": "Chile",
+    "lat": -18.1,
+    "lng": -69.5,
+    "alturaMsnm": 5860,
+    "tipo": "Complejo volcánico",
+    "ultimaErupcion": -320
+  },
+  {
+    "nombre": "Parinacota",
+    "pais": "Chile / Bolivia",
+    "lat": -18.166,
+    "lng": -69.142,
+    "alturaMsnm": 6336,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 290
+  },
+  {
+    "nombre": "Guallatiri",
+    "pais": "Chile",
+    "lat": -18.42,
+    "lng": -69.092,
+    "alturaMsnm": 6071,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1960
+  },
+  {
+    "nombre": "Isluga",
+    "pais": "Chile",
+    "lat": -19.15,
+    "lng": -68.83,
+    "alturaMsnm": 5550,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1913
+  },
+  {
+    "nombre": "Irruputuncu",
+    "pais": "Chile / Bolivia",
+    "lat": -20.73,
+    "lng": -68.55,
+    "alturaMsnm": 5163,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1995
+  },
+  {
+    "nombre": "Olca-Paruma",
+    "pais": "Chile / Bolivia",
+    "lat": -20.939,
+    "lng": -68.413,
+    "alturaMsnm": 5705,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": null
+  },
+  {
+    "nombre": "Putana",
+    "pais": "Chile",
+    "lat": -22.557,
+    "lng": -67.853,
+    "alturaMsnm": 5884,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1810
+  },
+  {
+    "nombre": "Láscar",
+    "pais": "Chile",
+    "lat": -23.37,
+    "lng": -67.73,
+    "alturaMsnm": 5592,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 2026
+  },
+  {
+    "nombre": "Socompa",
+    "pais": "Chile / Argentina",
+    "lat": -24.396,
+    "lng": -68.246,
+    "alturaMsnm": 6031,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": -5250
+  },
+  {
+    "nombre": "Llullaillaco",
+    "pais": "Chile / Argentina",
+    "lat": -24.72,
+    "lng": -68.53,
+    "alturaMsnm": 6739,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1877
+  },
+  {
+    "nombre": "Cerro Blanco",
+    "pais": "Argentina",
+    "lat": -26.7657,
+    "lng": -67.746,
+    "alturaMsnm": 4670,
+    "tipo": "Caldera",
+    "ultimaErupcion": -2300
+  },
+  {
+    "nombre": "Nevados Ojos del Salado",
+    "pais": "Chile / Argentina",
+    "lat": -27.109,
+    "lng": -68.541,
+    "alturaMsnm": 6879,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 750
+  },
+  {
+    "nombre": "Tupungatito",
+    "pais": "Chile / Argentina",
+    "lat": -33.425,
+    "lng": -69.797,
+    "alturaMsnm": 5660,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1987
+  },
+  {
+    "nombre": "San José",
+    "pais": "Chile / Argentina",
+    "lat": -33.789,
+    "lng": -69.895,
+    "alturaMsnm": 6070,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1960
+  },
+  {
+    "nombre": "Maipo",
+    "pais": "Chile / Argentina",
+    "lat": -34.164,
+    "lng": -69.832,
+    "alturaMsnm": 5323,
+    "tipo": "Caldera",
+    "ultimaErupcion": 1912
+  },
+  {
+    "nombre": "Tinguiririca",
+    "pais": "Chile",
+    "lat": -34.814,
+    "lng": -70.352,
+    "alturaMsnm": 4280,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1917
+  },
+  {
+    "nombre": "Infiernillo",
+    "pais": "Argentina",
+    "lat": -35.123,
+    "lng": -69.9,
+    "alturaMsnm": 3007,
+    "tipo": "Campo volcánico",
+    "ultimaErupcion": -6890
+  },
+  {
+    "nombre": "Planchón-Peteroa",
+    "pais": "Chile",
+    "lat": -35.223,
+    "lng": -70.568,
+    "alturaMsnm": 3977,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 2025
+  },
+  {
+    "nombre": "Descabezado Grande",
+    "pais": "Chile",
+    "lat": -35.58,
+    "lng": -70.75,
+    "alturaMsnm": 3953,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1933
+  },
+  {
+    "nombre": "Cerro Azul",
+    "pais": "Chile",
+    "lat": -35.653,
+    "lng": -70.761,
+    "alturaMsnm": 3788,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1967
+  },
+  {
+    "nombre": "Laguna del Maule",
+    "pais": "Chile",
+    "lat": -36.058,
+    "lng": -70.492,
+    "alturaMsnm": 2162,
+    "tipo": "Caldera",
+    "ultimaErupcion": -50
+  },
+  {
+    "nombre": "Nevado de Longaví",
+    "pais": "Chile",
+    "lat": -36.1959,
+    "lng": -71.1641,
+    "alturaMsnm": 3175,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": -4890
+  },
+  {
+    "nombre": "Payún Matrú",
+    "pais": "Argentina",
+    "lat": -36.422,
+    "lng": -69.241,
+    "alturaMsnm": 3715,
+    "tipo": "Campo volcánico",
+    "ultimaErupcion": -5050
+  },
+  {
+    "nombre": "Nevados de Chillán",
+    "pais": "Chile",
+    "lat": -36.868,
+    "lng": -71.378,
+    "alturaMsnm": 3180,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 2022
+  },
+  {
+    "nombre": "Meseta volcánica Tromen",
+    "pais": "Argentina",
+    "lat": -37.144,
+    "lng": -70.033,
+    "alturaMsnm": 4114,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1822
+  },
+  {
+    "nombre": "Antuco",
+    "pais": "Chile",
+    "lat": -37.406,
+    "lng": -71.349,
+    "alturaMsnm": 2979,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1869
+  },
+  {
+    "nombre": "Copahue",
+    "pais": "Chile / Argentina",
+    "lat": -37.856,
+    "lng": -71.183,
+    "alturaMsnm": 2953,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 2024
+  },
+  {
+    "nombre": "Callaqui",
+    "pais": "Chile",
+    "lat": -37.9276,
+    "lng": -71.4464,
+    "alturaMsnm": 3099,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1980
+  },
+  {
+    "nombre": "Lonquimay",
+    "pais": "Chile",
+    "lat": -38.379,
+    "lng": -71.586,
+    "alturaMsnm": 2832,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1990
+  },
+  {
+    "nombre": "Llaima",
+    "pais": "Chile",
+    "lat": -38.692,
+    "lng": -71.729,
+    "alturaMsnm": 3125,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 2009
+  },
+  {
+    "nombre": "Sollipulli",
+    "pais": "Chile",
+    "lat": -38.97,
+    "lng": -71.52,
+    "alturaMsnm": 2282,
+    "tipo": "Caldera",
+    "ultimaErupcion": 1240
+  },
+  {
+    "nombre": "Caburgua-Huelemolle",
+    "pais": "Chile",
+    "lat": -39.25,
+    "lng": -71.75,
+    "alturaMsnm": 1652,
+    "tipo": "Campo volcánico",
+    "ultimaErupcion": -5050
+  },
+  {
+    "nombre": "Villarrica",
+    "pais": "Chile",
+    "lat": -39.42,
+    "lng": -71.93,
+    "alturaMsnm": 2847,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 2025
+  },
+  {
+    "nombre": "Quetrupillán",
+    "pais": "Chile",
+    "lat": -39.496,
+    "lng": -71.722,
+    "alturaMsnm": 2360,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 255
+  },
+  {
+    "nombre": "Lanín",
+    "pais": "Chile / Argentina",
+    "lat": -39.637,
+    "lng": -71.502,
+    "alturaMsnm": 3776,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 560
+  },
+  {
+    "nombre": "Grupo Huanquihue",
+    "pais": "Argentina",
+    "lat": -39.887,
+    "lng": -71.58,
+    "alturaMsnm": 2189,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1750
+  },
+  {
+    "nombre": "Mocho-Choshuenco",
+    "pais": "Chile",
+    "lat": -39.927,
+    "lng": -72.027,
+    "alturaMsnm": 2422,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1937
+  },
+  {
+    "nombre": "Carrán-Los Venados",
+    "pais": "Chile",
+    "lat": -40.35,
+    "lng": -72.07,
+    "alturaMsnm": 1114,
+    "tipo": "Cono piroclástico",
+    "ultimaErupcion": 1979
+  },
+  {
+    "nombre": "Puyehue-Cordón Caulle",
+    "pais": "Chile",
+    "lat": -40.59,
+    "lng": -72.117,
+    "alturaMsnm": 2236,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 2012
+  },
+  {
+    "nombre": "Complejo volcánico Antillanca",
+    "pais": "Chile",
+    "lat": -40.783,
+    "lng": -72.15,
+    "alturaMsnm": 1979,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": -230
+  },
+  {
+    "nombre": "Puntiagudo-Cordón Cenizos",
+    "pais": "Chile",
+    "lat": -40.969,
+    "lng": -72.264,
+    "alturaMsnm": 2493,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1850
+  },
+  {
+    "nombre": "Osorno",
+    "pais": "Chile",
+    "lat": -41.105,
+    "lng": -72.496,
+    "alturaMsnm": 2659,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1869
+  },
+  {
+    "nombre": "Cayutue-La Viguería",
+    "pais": "Chile",
+    "lat": -41.3,
+    "lng": -72.27,
+    "alturaMsnm": 506,
+    "tipo": "Campo volcánico",
+    "ultimaErupcion": -190
+  },
+  {
+    "nombre": "Calbuco",
+    "pais": "Chile",
+    "lat": -41.33,
+    "lng": -72.618,
+    "alturaMsnm": 1974,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 2015
+  },
+  {
+    "nombre": "Yate",
+    "pais": "Chile",
+    "lat": -41.755,
+    "lng": -72.396,
+    "alturaMsnm": 2187,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1090
+  },
+  {
+    "nombre": "Hornopirén",
+    "pais": "Chile",
+    "lat": -41.874,
+    "lng": -72.431,
+    "alturaMsnm": 1572,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 340
+  },
+  {
+    "nombre": "Apagado",
+    "pais": "Chile",
+    "lat": -41.88,
+    "lng": -72.58,
+    "alturaMsnm": 1210,
+    "tipo": "Cono piroclástico",
+    "ultimaErupcion": -590
+  },
+  {
+    "nombre": "Huequi",
+    "pais": "Chile",
+    "lat": -42.377,
+    "lng": -72.578,
+    "alturaMsnm": 1318,
+    "tipo": "Domo de lava",
+    "ultimaErupcion": 1920
+  },
+  {
+    "nombre": "Michinmahuida",
+    "pais": "Chile",
+    "lat": -42.799,
+    "lng": -72.445,
+    "alturaMsnm": 2452,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1835
+  },
+  {
+    "nombre": "Chaitén",
+    "pais": "Chile",
+    "lat": -42.8349,
+    "lng": -72.6514,
+    "alturaMsnm": 1122,
+    "tipo": "Caldera",
+    "ultimaErupcion": 2011
+  },
+  {
+    "nombre": "Corcovado",
+    "pais": "Chile",
+    "lat": -43.189,
+    "lng": -72.794,
+    "alturaMsnm": 1826,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": -4920
+  },
+  {
+    "nombre": "Yanteles",
+    "pais": "Chile",
+    "lat": -43.469,
+    "lng": -72.782,
+    "alturaMsnm": 1790,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": -6650
+  },
+  {
+    "nombre": "Melimoyu",
+    "pais": "Chile",
+    "lat": -44.08,
+    "lng": -72.88,
+    "alturaMsnm": 2400,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 200
+  },
+  {
+    "nombre": "Mentolat",
+    "pais": "Chile",
+    "lat": -44.6931,
+    "lng": -73.0767,
+    "alturaMsnm": 1603,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1710
+  },
+  {
+    "nombre": "Maca",
+    "pais": "Chile",
+    "lat": -45.1,
+    "lng": -73.17,
+    "alturaMsnm": 2960,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1560
+  },
+  {
+    "nombre": "Cerro Hudson",
+    "pais": "Chile",
+    "lat": -45.9,
+    "lng": -72.97,
+    "alturaMsnm": 1905,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 2011
+  },
+  {
+    "nombre": "Lautaro",
+    "pais": "Chile",
+    "lat": -49.019,
+    "lng": -73.504,
+    "alturaMsnm": 3542,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1979
+  },
+  {
+    "nombre": "Aguilera",
+    "pais": "Chile",
+    "lat": -50.33,
+    "lng": -73.75,
+    "alturaMsnm": 2546,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": -1253
+  },
+  {
+    "nombre": "Reclus",
+    "pais": "Chile",
+    "lat": -50.9395,
+    "lng": -73.5802,
+    "alturaMsnm": 1403,
+    "tipo": "Cono piroclástico",
+    "ultimaErupcion": 1908
+  },
+  {
+    "nombre": "Campo volcánico Pali-Aike",
+    "pais": "Chile / Argentina",
+    "lat": -52.082,
+    "lng": -69.698,
+    "alturaMsnm": 282,
+    "tipo": "Campo volcánico",
+    "ultimaErupcion": -5550
+  },
+  {
+    "nombre": "Monte Burney",
+    "pais": "Chile",
+    "lat": -52.33,
+    "lng": -73.4,
+    "alturaMsnm": 1758,
+    "tipo": "Estratovolcán",
+    "ultimaErupcion": 1910
+  },
+  {
+    "nombre": "Fueguino",
+    "pais": "Chile",
+    "lat": -54.97,
+    "lng": -70.262,
+    "alturaMsnm": 157,
+    "tipo": "Domo de lava",
+    "ultimaErupcion": 1820
+  }
+]

@@ -11,7 +11,8 @@
     "db:types": "supabase gen types typescript --local > lib/database.types.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "ingest": "tsx scripts/ingest.ts"
+    "ingest": "tsx scripts/ingest.ts",
+    "volcanes:catalogo": "tsx scripts/catalogo-volcanes.ts"
   },
   "engines": {
     "node": ">=24"

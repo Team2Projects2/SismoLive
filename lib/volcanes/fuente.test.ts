@@ -3,7 +3,7 @@ import { obtenerDatosVolcanes } from "./fuente";
 import type { Volcan } from "./mapear";
 
 function volcan(nombre: string, nivel: Volcan["nivel"]): Volcan {
-  return { nombre, region: null, lat: -39, lng: -72, nivel, rankingRiesgo: null, alturaMsnm: null, actualizado: null };
+  return { nombre, region: null, pais: null, lat: -39, lng: -72, nivel, rankingRiesgo: null, alturaMsnm: null, tipo: null, ultimaErupcion: null, actualizado: null };
 }
 
 describe("obtenerDatosVolcanes", () => {

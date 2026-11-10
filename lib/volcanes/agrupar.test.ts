@@ -6,11 +6,14 @@ function volcan(nombre: string, nivel: NivelVolcan, lng = -70, lat = -30): Volca
   return {
     nombre,
     region: null,
+    pais: null,
     lat,
     lng,
     nivel,
     rankingRiesgo: null,
     alturaMsnm: null,
+    tipo: null,
+    ultimaErupcion: null,
     actualizado: null,
   };
 }

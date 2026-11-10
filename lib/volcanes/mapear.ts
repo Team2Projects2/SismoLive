@@ -3,12 +3,18 @@ export type NivelVolcan = 0 | 1 | 2 | 3 | 4 | 5;
 export type Volcan = {
   nombre: string;
   region: string | null;
+  // Country in Spanish; shared border volcanoes read "Chile / Argentina".
+  pais: string | null;
   lat: number;
   lng: number;
   // null when no activity source is available (fallback catalog without EAV).
   nivel: NivelVolcan | null;
   rankingRiesgo: number | null;
   alturaMsnm: number | null;
+  // Volcano type in Spanish, e.g. "Estratovolcán".
+  tipo: string | null;
+  // Year of the last known eruption; negative values are BCE.
+  ultimaErupcion: number | null;
   actualizado: string | null;
 };
 
@@ -52,11 +58,15 @@ export function registroAVolcan(registro: unknown): Volcan | null {
   return {
     nombre,
     region: aTexto(r.region),
+    // RNVV is Chile's network; the catalog refines shared border volcanoes.
+    pais: "Chile",
     lat,
     lng,
     nivel: r.nivel,
     rankingRiesgo: aNumero(r.ranking_riesgo),
     alturaMsnm: aNumero(r.altura_msnm),
+    tipo: aTexto(r.tipo_volcan),
+    ultimaErupcion: null,
     actualizado: aFechaIso(r.updated_at),
   };
 }
