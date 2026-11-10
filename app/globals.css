@@ -245,3 +245,40 @@ body {
   width: min(300px, calc(100vw - 44px));
 }
 
+/* Volcano grouping transitions. Markers own their outer transform (position), so these animate
+   the inner element. --dx/--dy: pixel offset from the volcano to its group centroid. */
+@keyframes volcan-fusion {
+  from { transform: translate(0, 0) scale(1); opacity: 1; }
+  to { transform: translate(var(--dx), var(--dy)) scale(0.55); opacity: 0; }
+}
+@keyframes volcan-separa {
+  from { transform: translate(var(--dx), var(--dy)) scale(0.55); opacity: 0; }
+  to { transform: translate(0, 0) scale(1); opacity: 1; }
+}
+@keyframes volcan-grupo-entra {
+  0% { transform: scale(0.4); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.volcan-fusion {
+  transform-origin: 50% 100%;
+  animation: volcan-fusion 480ms cubic-bezier(0.55, 0, 0.75, 0.2) forwards;
+}
+.volcan-separa {
+  transform-origin: 50% 100%;
+  animation: volcan-separa 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+/* Starts as the cones arrive, with a small overshoot so the merge reads as one gesture. */
+.volcan-grupo-entra {
+  transform-origin: 50% 100%;
+  animation: volcan-grupo-entra 520ms 200ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .volcan-fusion {
+    display: none;
+  }
+  .volcan-separa,
+  .volcan-grupo-entra {
+    animation: none;
+  }
+}

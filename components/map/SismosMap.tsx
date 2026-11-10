@@ -183,6 +183,7 @@ export default function SismosMap({ sismos, volcanes, capas, foco, mostrarUltimo
     setVista({
       proyectar: (lng, lat) => map.project([lng, lat]),
       ancho: map.getContainer().clientWidth,
+      zoom: map.getZoom(),
     });
   }
 

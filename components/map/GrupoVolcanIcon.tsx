@@ -41,15 +41,18 @@ export default function GrupoVolcanIcon({ nivel, cantidad, ancho }: Props) {
         </g>
       ))}
 
-      <circle cx="45" cy="29" r="6" fill={colorNivel(nivel)} stroke="#fbf9f4" strokeWidth="1.2" />
+      {/* Count sits on the flank of the front cone, centered: the number is what you read first. */}
+      <circle cx="25" cy="25" r="8.6" fill={colorNivel(nivel)} stroke="#fbf9f4" strokeWidth="1.6" />
       <text
-        x="45"
-        y="31.4"
+        x="25"
+        y="25"
+        dy=".36em"
         textAnchor="middle"
-        fontSize={cantidad > 9 ? "6" : "7"}
+        fontSize={cantidad > 9 ? "9.5" : "11"}
         fontWeight="700"
         fill="#fffdf8"
         fontFamily="system-ui"
+        style={{ fontVariantNumeric: "tabular-nums" }}
       >
         {cantidad}
       </text>

@@ -16,6 +16,17 @@ export type Agrupacion = { sueltos: Volcan[]; grupos: GrupoVolcanes[] };
 export const NIVEL_MAX_AGRUPABLE = 1;
 export const RADIO_GRUPO_PX = 40;
 
+// Zoomed out, the whole country fits on screen and the cones pile up: group much more
+// aggressively there, and relax to RADIO_GRUPO_PX once the view is regional.
+const RADIO_LEJOS_PX = 110;
+const ZOOM_LEJOS = 4;
+const ZOOM_CERCA = 7;
+
+export function radioPorZoom(zoom: number): number {
+  const t = Math.min(1, Math.max(0, (zoom - ZOOM_LEJOS) / (ZOOM_CERCA - ZOOM_LEJOS)));
+  return Math.round(RADIO_LEJOS_PX + (RADIO_GRUPO_PX - RADIO_LEJOS_PX) * t);
+}
+
 function cerca(a: PuntoProyectado, b: PuntoProyectado, radio: number): boolean {
   return Math.hypot(a.x - b.x, a.y - b.y) <= radio;
 }
