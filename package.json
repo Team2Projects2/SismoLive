@@ -20,7 +20,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.119.0",
     "mapbox-gl": "^3.34.2",
-    "next": "16.4.5",
+    "next": "16.4.6",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "react-map-gl": "^8.1.3",
